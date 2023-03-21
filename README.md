@@ -1,8 +1,8 @@
-# Getting Started with Create React App
+# Getting Started with this Project
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).\
-This project uses Tailwind CSS\
-This project uses react-router-dom
+This project uses [Tailwind CSS](https://tailwindui.com/documentation)\
+This project uses [React Router](https://reactrouter.com/en/main)
 
 ## Available Scripts
 
