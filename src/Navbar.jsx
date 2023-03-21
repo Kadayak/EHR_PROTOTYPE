@@ -3,10 +3,11 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 const navigation = [
+  { name: 'Home', href: 'home', current: false},
   { name: 'Patients', href: 'patients', current: false },
-  { name: 'Notifications', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
+  { name: 'Notifications', href: 'notifications', current: false },
+  { name: 'Projects', href: 'projects', current: false },
+  { name: 'Calendar', href: 'calendar', current: false },
 ]
 
 
@@ -38,12 +39,12 @@ export default function Navbar() {
                   <img
                     className="block h-8 w-auto lg:hidden"
                     src="favicon2.ico"
-                    alt="Your Company"
+                    alt="EHR Solutions"
                   />
                   <img
                     className="hidden h-8 w-auto lg:block"
                     src="favicon2.ico"
-                    alt="Your Company"
+                    alt="EHR Solutions"
                   />
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
