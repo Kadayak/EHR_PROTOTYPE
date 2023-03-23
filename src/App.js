@@ -11,7 +11,7 @@ function App() {
     <React.Fragment>
       <Navbar/>
       <div className="App">
-        <header className="App-header">
+        <header className="App-header bg-hero bg-cover bg-no-repeat bg-centers">
           <Routes>
             <Route exact path="/patients" element={<PatientCard/>}></Route>
             <Route exact path="/home" element={<HomePage/>}></Route>

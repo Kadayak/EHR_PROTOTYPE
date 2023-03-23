@@ -4,15 +4,17 @@ const HomePage = () => {
 
     return (
         <React.Fragment>
-            <div className="flex flex-col">
-                <div className="overflow-hidden">
-                    <img class="object-contain h-full w-full" src="/images/hospital_stock.jpg" alt="Hospital"/>
-                    <div className="absolute bottom-0 left-0 right-0 px-4 py-2 bg-gray-800 opacity-70">
-                        <h1 className="text-3xl text-white">Welcome to the Hospital</h1>
-                        <p class="mt-2 text-sm text-gray-300">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima nihil voluptas a eum amet sapiente maxime impedit. Accusantium cupiditate dolorem ut magnam placeat deserunt. Praesentium assumenda mollitia facere, pariatur eos fuga officia cumque veniam ratione quisquam, enim autem labore debitis magnam quae obcaecati distinctio quos est. Officia dolorum excepturi ut animi aspernatur, saepe beatae culpa modi assumenda expedita numquam perspiciatis dignissimos quod unde quaerat! Voluptatibus tempore recusandae excepturi at necessitatibus ex accusamus, aperiam hic atque explicabo labore aliquid velit perferendis a dolore incidunt qui! Dicta temporibus exercitationem veniam, aliquid sed assumenda beatae consequuntur ratione dolorem accusamus expedita reiciendis odio mollitia!</p>
+            <div className="flex flex-col h-full w-full">
+                <div className="flex justify-center">
+                    <div className="flex flex-col rounded-lg bg-white shadow-lg dark:bg-neutral-700 md:max-w-xl md:flex-row">
+                        <img className="h-96 w-full rounded-t-lg object-cover md:h-auto md:w-48 md:rounded-none md:rounded-l-lg" src="https://mdbootstrap.com/wp-content/uploads/2020/06/vertical.jpg" alt="" />
+                        <div className="flex flex-col justify-start p-6">
+                            <h5 className="mb-2 text-xl font-medium text-neutral-800 dark:text-neutral-50"> Card title </h5>
+                            <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                            <p className="text-xs text-neutral-500 dark:text-neutral-300">Last updated 3 mins ago</p>
+                        </div>
                     </div>
                 </div>
-                <div className="basis-auto"></div>
             </div>
         </React.Fragment>
     );
