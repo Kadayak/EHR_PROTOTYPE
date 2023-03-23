@@ -83,7 +83,6 @@ const PatientCard = (props) => {
                 <a href={`${location.pathname}/${patient.id}`} class="text-left block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                     <img class="object-cover object-center w-full h-56 mb-6 rounded-lg" src={patient.photo} alt="avatar" />
                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{patient.firstName} {patient.lastName}</h5>
-                    {/*<p class="text-xl font-normal text-gray-700 dark:text-gray-400">Age: {age}</p>*/}
                     <p class="text-2xl font-normal text-gray-700 dark:text-gray-400">Email: {patient.email}</p>
                     <p class="text-2xl font-normal text-gray-700 dark:text-gray-400">Appointment: {patient.appointment}</p>
                 </a>

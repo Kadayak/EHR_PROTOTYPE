@@ -9,7 +9,11 @@ module.exports = {
     fontFamily:{
         customfontname: ['Inter var', ...defaultTheme.fontFamily.sans,]
       },
-      extend: {},
+      extend: {
+        backgroundImage: {
+          'hero': "url('../public/images/hospital_stock.jpg')"
+        }
+      },
   },
   variants: {},
   plugins: [],
