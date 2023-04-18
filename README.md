@@ -4,6 +4,14 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 This project uses [Tailwind CSS](https://tailwindui.com/documentation).\
 This project uses [React Router](https://reactrouter.com/en/main).
 
+## Prefix
+
+To get the project started, make sure you have _npm_ installed on your computer. Npm is a package manager, which downloads the necessary packages into this directory for the project to run.
+
+After having downloaded npm (`npm -v` in the terminal should now give you your npm version), please run `npm install`in the directory. This command will run all the necessary packages, as provided in the package.json file.
+
+Now, your directory should have a `node_modules` folder. You should not worry about it, or even really open it. node_modules essentially stores all the packages / code necessary for this project to run. Now, you can start your project!
+
 ## Available Scripts
 
 In the project directory, you can run:
