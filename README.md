@@ -1,4 +1,4 @@
-l# Client / Frontend
+# Client / Frontend
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).\
 This project uses [Tailwind CSS](https://tailwindui.com/documentation).\

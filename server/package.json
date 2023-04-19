@@ -12,7 +12,6 @@
     "build": "rimraf src/dist && npx tsc",
     "prestart": "npm run build",
     "start": "node src/dist/index",
-    "predev": "npm run build",
     "dev": "concurrently \"npx tsc -w\" \"nodemon src/dist/index\""
   },
   "author": "",

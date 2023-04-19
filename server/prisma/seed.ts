@@ -2,13 +2,13 @@
 
 import { db } from "../src/utils/db.server.js";
 
-type User = {
+type Patient = {
   firstName: string;
   lastName: string;
   birthDate: Date;
 };
 
-function getUsers(): Array<User> {
+function getPatients(): Array<Patient> {
   return [
     {
       firstName: "Kristófer Fannar",
@@ -25,12 +25,12 @@ function getUsers(): Array<User> {
 
 async function seed() {
   await Promise.all(
-    getUsers().map((user) => {
-      return db.user.create({
+    getPatients().map((patient) => {
+      return db.patients.create({
         data: {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          birthDate: user.birthDate,
+          firstName: patient.firstName,
+          lastName: patient.lastName,
+          birthDate: patient.birthDate,
         },
       });
     })
