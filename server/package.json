@@ -2,11 +2,15 @@
   "name": "server",
   "version": "1.0.0",
   "description": "backend for EHR system",
-  "main": "src/index.js",
+  "main": "src/dist/index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index",
-    "dev": "nodemon src/index"
+    "build": "rimraf src/dist && npx tsc",
+    "prestart": "npm run build",
+    "start": "node src/dist/index",
+    "predev": "npm run build",
+    "dev": "concurrently \"npx tsc -w\" \"nodemon src/dist/index\""
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +18,10 @@
     "express": "^4.18.2"
   },
   "devDependencies": {
+    "concurrently": "^8.0.1",
+    "rimraf": "^5.0.0",
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.15.11",
     "nodemon": "^2.0.22",
     "typescript": "^5.0.4"
   }

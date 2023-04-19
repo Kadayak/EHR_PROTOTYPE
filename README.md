@@ -81,4 +81,27 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 # Server / Backend
 
-This backend is made with node.js, using express. To start it up, you have to have npm on your computer, then in the server directory, instal the packages using `npm install`. Now, you can start the server in development mode using `npm run dev`, or in production mode using `npm start`.
+This backend is made with node.js, using express. It is written using typescript.
+
+## Setting up
+
+To start the server up, you have to have npm on your computer, then in the server directory, install the necessary packages using `npm install`.
+
+Now, you can start the server in development mode using `npm run dev`, or in production mode using `npm start`.
+
+If problems arise, or if setting up is difficult or unclear, let Kristófer know or add to this readme file.
+
+## Tutorials used:
+
+#### [Using typescript with Express](https://youtu.be/qy8PxD3alWw)
+
+Includes:
+
+- Setting up typescript with node (tsc, typescript, @types/node and @types/express)
+- Npm scripts and packages for hot reloading (rimraf, concurrently)
+
+### [Express with typescript and Prisma](https://www.youtube.com/watch?v=PM58NEMJgMw)
+
+Includes:
+
+- Typescript config (tsconfig.json)
