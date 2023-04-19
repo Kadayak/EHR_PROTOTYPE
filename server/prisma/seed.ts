@@ -1,12 +1,7 @@
 // loads default data into our database, so that on initialization, we have some data every time we reset it.
 
 import { db } from "../src/utils/db.server.js";
-
-type Patient = {
-  firstName: string;
-  lastName: string;
-  birthDate: Date;
-};
+import { Patient } from "../src/routes/patients/patient.js";
 
 function getPatients(): Array<Patient> {
   return [
