@@ -1,4 +1,4 @@
-# Getting Started with this Project
+# Client / Frontend
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).\
 This project uses [Tailwind CSS](https://tailwindui.com/documentation).\
@@ -78,3 +78,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+# Server / Backend
+
+This backend is made with node.js, using express. To start it up, you have to have npm on your computer, then in the server directory, instal the packages using `npm install`. Now, you can start the server in development mode using `npm run dev`, or in production mode using `npm start`.
