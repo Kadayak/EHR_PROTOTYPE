@@ -1,9 +1,9 @@
-const express = require("express");
+import { Router } from "express";
 
-const router = express.Router();
+const router = Router();
 
 router.get("/", (req, res) => {
   res.status(200).json({ users: [{ id: 0, name: "kristofer" }] });
 });
 
-module.exports = router;
+export default router;
