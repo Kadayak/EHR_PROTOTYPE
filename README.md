@@ -1,4 +1,4 @@
-# Client / Frontend
+l# Client / Frontend
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).\
 This project uses [Tailwind CSS](https://tailwindui.com/documentation).\
@@ -81,11 +81,26 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 # Server / Backend
 
-This backend is made with node.js, using express. It is written using typescript.
+This backend is made with node.js, using express. It is written using typescript, with prisma as a database ORM.
 
 ## Setting up
 
 To start the server up, you have to have npm on your computer, then in the server directory, install the necessary packages using `npm install`.
+
+### Database
+
+To set up the prisma database, run `npx prisma init --datasource-provider sqlite`. As can be seen in the command, we will use sqlite in this project, so make sure you have installed sqlite on your computer. From there, you will see three commands:
+
+1. Setting the DATABASE_URL in the .env file to point to your database.
+2. Running `prisma db pull` to make our database schema into a prisma schema.
+
+   2.1 Conversely, running `prisma db push` will update our database schema from our prisma schema.
+
+3. Running `prisma generate`to generate a prisma client to connect to our database.
+
+**After restarts on the database, to seed it, use `npx prisma db seed`. This command will fill the database with seed data.**
+
+### Server
 
 Now, you can start the server in development mode using `npm run dev`, or in production mode using `npm start`.
 
@@ -105,3 +120,6 @@ Includes:
 Includes:
 
 - Typescript config (tsconfig.json)
+- dotenv functionality with typescript (dotenv, @types/dotenv)
+- Prisma client, schema, and sqlite db.
+  - Note that _esbuild-register_ from the video did not work in this project. Rather, _ts-node_ was used for seeding.
