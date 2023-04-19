@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
   return res.status(200).json({ message: "hello, frontend" });
 });
 
-app.use("/patients", patientRouter);
+app.use("/api/patients", patientRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
