@@ -70,4 +70,20 @@ describe("/patients", () => {
       expect(res.body.message).toBe("birthDate has to be a valid date");
     });
   });
+
+  describe("GET", () => {
+    test("invalid id fails", async () => {
+      const id = "invalid-id";
+      const res = await request(URL).get(PATH + `/${id}`);
+
+      expect(res).toHaveProperty("statusCode", 400);
+    });
+
+    test("non-existing id fails", async () => {
+      const id = 999999;
+      const res = await request(URL).get(PATH + `/${id}`);
+
+      expect(res).toHaveProperty("statusCode", 404);
+    });
+  });
 });

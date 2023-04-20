@@ -16,7 +16,18 @@ patientRouter.get("/", async (req, res) => {
 patientRouter.get("/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
+    if (isNaN(id) || id < 0)
+      return res
+        .status(400)
+        .json({ message: "id has to be a non-negative number" });
+
     const patient = await patientService.getPatient(id);
+
+    if (!patient)
+      return res
+        .status(404)
+        .json({ message: `Patient with id ${id} not found` });
+
     res.status(200).json(patient);
   } catch (error) {
     return res.status(500).json(error.message);
