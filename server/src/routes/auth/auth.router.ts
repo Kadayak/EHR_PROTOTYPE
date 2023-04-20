@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   signUp,
   loginUser,
+  getUser,
   validatePassword,
   passwordRules,
 } from "./auth.service.js";
@@ -17,6 +18,12 @@ authRouter.post("/signUp", async (req, res) => {
 
   if (!validatePassword(password))
     return res.status(400).json({ message: passwordRules });
+
+  const userWithUsername = await getUser(username);
+  if (userWithUsername)
+    return res
+      .status(400)
+      .json({ message: `user with username ${username} already exists` });
 
   const signUpResponse = await signUp(username, password);
 
@@ -35,4 +42,5 @@ authRouter.post("/login", async (req, res) => {
   if (!auth) {
     return res.status(400).json({ message: "Incorrect login information" });
   }
+  return res.status(201).json(auth);
 });
