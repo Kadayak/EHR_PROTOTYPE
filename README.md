@@ -106,6 +106,12 @@ Now, you can start the server in development mode using `npm run dev`, or in pro
 
 If problems arise, or if setting up is difficult or unclear, let Kristófer know or add to this readme file.
 
+## Testing:
+
+For testing, we use _jest_, a testing package for javascript. As we are testing http endpoints, we decide to test with _supertest_, which allows us to call the endpoints for the tests.
+
+The tests are inside the _/test_ folder. To run them, make sure that the server is up (either with `npm run dev` or `npm start`), then in another terminal, call `npm test`. This will run all the test files in the _/test_ folder with jest.
+
 ## Tutorials used:
 
 #### [Using typescript with Express](https://youtu.be/qy8PxD3alWw)

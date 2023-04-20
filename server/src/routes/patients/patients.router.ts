@@ -27,7 +27,11 @@ patientRouter.post("/", async (req, res) => {
   try {
     const { firstName, lastName, birthDate } = req.body;
 
-    if (!firstName || !lastName || !birthDate)
+    if (
+      firstName === undefined ||
+      lastName === undefined ||
+      birthDate === undefined
+    )
       return res.status(400).json({
         message: "Body has to include firstName, lastName and birthDate",
       });
@@ -37,10 +41,8 @@ patientRouter.post("/", async (req, res) => {
         message: "both firstName and lastName have to be non-empty strings",
       });
 
-    let date: Date;
-    try {
-      date = new Date(birthDate);
-    } catch (error) {
+    let date: Date = new Date(birthDate);
+    if (isNaN(Number(date))) {
       return res
         .status(400)
         .json({ message: "birthDate has to be a valid date" });
