@@ -1,14 +1,7 @@
 import { db } from "../../utils/db.server.js";
-import { Patient } from "./patient.js";
+import { Patient, PatientResponse } from "./patient.js";
 
-type PatientOut = {
-  id: number;
-  firstName: string;
-  lastName: string;
-  birthDate: Date;
-};
-
-export const listPatients = async (): Promise<PatientOut[]> => {
+export const listPatients = async (): Promise<PatientResponse[]> => {
   return db.patients.findMany({
     select: {
       id: true,
@@ -19,7 +12,9 @@ export const listPatients = async (): Promise<PatientOut[]> => {
   });
 };
 
-export const getPatient = async (id: number): Promise<PatientOut | null> => {
+export const getPatient = async (
+  id: number
+): Promise<PatientResponse | null> => {
   return db.patients.findUnique({
     where: {
       id: id, // can be shortented to just "id"
@@ -33,7 +28,9 @@ export const getPatient = async (id: number): Promise<PatientOut | null> => {
   });
 };
 
-export const createPatient = async (patient: Patient): Promise<PatientOut> => {
+export const createPatient = async (
+  patient: Patient
+): Promise<PatientResponse> => {
   return db.patients.create({
     data: {
       firstName: patient.firstName,

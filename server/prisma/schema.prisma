@@ -42,3 +42,8 @@ model Appointments {
   pending     Boolean  @default(true)
   approved    Boolean
 }
+
+model Users {
+  username       String @id
+  hashedPassword String
+}

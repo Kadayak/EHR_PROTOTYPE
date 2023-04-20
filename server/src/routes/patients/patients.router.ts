@@ -59,14 +59,14 @@ patientRouter.post("/", async (req, res) => {
         .json({ message: "birthDate has to be a valid date" });
     }
 
-    const patientDTO: Patient = {
+    const patient: Patient = {
       firstName: firstName,
       lastName: lastName,
       birthDate: date,
     };
 
-    const patient = await patientService.createPatient(patientDTO);
-    return res.status(201).json(patient);
+    const patientResponse = await patientService.createPatient(patient);
+    return res.status(201).json(patientResponse);
   } catch (error) {
     return res.status(500).json(error.message);
   }
