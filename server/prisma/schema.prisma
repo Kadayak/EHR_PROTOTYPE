@@ -11,10 +11,34 @@ datasource db {
 }
 
 model Patients {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  firstName String
-  lastName  String
-  birthDate DateTime
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  firstName    String
+  lastName     String
+  birthDate    DateTime
+  Appointments Appointments[]
+}
+
+model Doctors {
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  firstName    String
+  lastName     String
+  birthDate    DateTime
+  Appointments Appointments[]
+}
+
+model Appointments {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  patient     Patients @relation(fields: [patientId], references: [id])
+  patientId   Int
+  doctor      Doctors  @relation(fields: [doctorId], references: [id])
+  doctorId    Int
+  time        DateTime
+  description String
+  pending     Boolean  @default(true)
+  approved    Boolean
 }
