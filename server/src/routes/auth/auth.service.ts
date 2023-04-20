@@ -25,6 +25,21 @@ const saveUser = async (user: User) => {
   });
 };
 
+const getUser = async (user: User) => {
+  return db.users.findUnique({
+    where: {
+      username: user.username, //this should be an Id
+    },
+  });
+};
+
+export const loginUser = async (username: string, password: string) => {
+  const user: User = { username: username, hashedPassword: password };
+  const userDb: User = await getUser(user);
+  const auth = await bcrypt.compare(password, userDb.hashedPassword);
+  return auth;
+};
+
 const authenticateUser = async (username, password) => {
   //   const ;
 };
