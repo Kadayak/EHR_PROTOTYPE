@@ -4,39 +4,39 @@ import jwt from "jsonwebtoken";
 import { db } from "../../utils/db.server.js";
 import { User, UserToken } from "./user.js";
 
-export const signUp = async (username: string, password: string) => {
+export const signUp = async (cpr: string, password: string) => {
   const hashedPassword: string = await bcrypt.hash(password, 10);
   const user: User = {
-    username: username,
+    cpr: cpr,
     hashedPassword: hashedPassword,
   };
 
-  await saveUser(user);
-  return;
+  return await saveUser(user);
+  // return;
 };
 
 const saveUser = async (user: User) => {
-  db.users.create({
+  return db.users.create({
     data: {
-      username: user.username,
+      cpr: user.cpr,
       hashedPassword: user.hashedPassword,
     },
   });
 };
 
-export const getUser = async (username: string) => {
+export const getUser = async (cpr: string) => {
   return db.users.findUnique({
     where: {
-      username: username, //this should be an Id
+      cpr: cpr, //this should be an Id
     },
   });
 };
 
 export const loginUser = async (
-  username: string,
+  cpr: string,
   password: string
 ): Promise<User | null> => {
-  const user: User = await getUser(username);
+  const user: User = await getUser(cpr);
 
   if (!user) return;
 
@@ -46,7 +46,15 @@ export const loginUser = async (
   return; // TODO what should we return here?
 };
 
-export const validatePassword = async (password: string) => {
+export const validateCpr = (cpr: string) => {
+  if (!cpr) return false;
+  return true;
+};
+
+export const cprRules = "Cpr must be a non-empty string";
+
+export const validatePassword = (password: string) => {
+  if (!password) return false;
   return true;
 };
 
@@ -70,6 +78,14 @@ export const generateRefreshToken = (user: UserToken) => {
 const saveRefreshToken = async (refreshToken: string) => {
   await db.refreshTokens.create({
     data: {
+      token: refreshToken,
+    },
+  });
+};
+
+export const deleteRefreshToken = async (refreshToken: string) => {
+  return await db.refreshTokens.delete({
+    where: {
       token: refreshToken,
     },
   });

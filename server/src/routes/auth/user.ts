@@ -1,8 +1,8 @@
 export type User = {
-  username: string;
+  cpr: string;
   hashedPassword: string;
 };
 
 export type UserToken = {
-  username: string;
+  cpr: string;
 };

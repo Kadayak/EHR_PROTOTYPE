@@ -1,7 +1,9 @@
 export type Patient = {
+  cpr: string;
   firstName: string;
   lastName: string;
   birthDate: Date;
+  homeDoctorCpr: string;
 };
 
 // export type PatientRequest = {
@@ -11,8 +13,9 @@ export type Patient = {
 // };
 
 export type PatientResponse = {
-  id: number;
+  cpr: string;
   firstName: string;
   lastName: string;
   birthDate: Date;
+  homeDoctorCpr: string;
 };

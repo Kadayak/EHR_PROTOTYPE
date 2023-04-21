@@ -129,3 +129,15 @@ Includes:
 - dotenv functionality with typescript (dotenv, @types/dotenv)
 - Prisma client, schema, and sqlite db.
   - Note that _esbuild-register_ from the video did not work in this project. Rather, _ts-node_ was used for seeding.
+
+### [Node.js User authentication - bcrypt](https://www.youtube.com/watch?v=Ud5xKCYQTjM)
+
+Includes:
+
+- signing up and logging in with bcrypt. Password hashes and usernames stored in database.
+
+### [JWT Tokens - jsonwebtokens](https://www.youtube.com/watch?v=mbsmsi7l3r4)
+
+Includes:
+
+- access tokens and refresh tokens. Privilages.

@@ -3,46 +3,46 @@ import jwt from "jsonwebtoken";
 
 import * as authService from "./auth.service.js";
 import { User, UserToken } from "./user.js";
+import authenticateToken from "../../utils/token_auth.js";
 
 export const authRouter = Router();
 
 authRouter.post("/signUp", async (req, res) => {
-  const { username, password } = req.body;
-  if (!username)
-    return res
-      .status(400)
-      .json({ message: "username must be a non-empty string" });
+  const { cpr, password } = req.body;
+
+  if (!authService.validateCpr(cpr))
+    return res.status(400).json({ message: authService.cprRules });
 
   if (!authService.validatePassword(password))
     return res.status(400).json({ message: authService.passwordRules });
 
-  const userWithUsername = await authService.getUser(username);
-  if (userWithUsername)
+  const userExists = await authService.getUser(cpr);
+  if (userExists)
     return res
       .status(400)
-      .json({ message: `user with username ${username} already exists` });
+      .json({ message: `user with cpr ${cpr} already exists` });
 
-  const signUpResponse = await authService.signUp(username, password);
+  const _ = await authService.signUp(cpr, password);
 
   return res.status(201).json({ message: "User created!" });
+  // return res.status(201).json({ message: _ });
 });
 
 authRouter.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-  if (!username) {
-    return res
-      .status(400)
-      .json({ message: "username must be a non-empty string" });
+  const { cpr, password } = req.body;
+  if (!authService.validateCpr(cpr)) {
+    return res.status(400).json({ message: authService.cprRules });
   }
 
-  const user: User = await authService.loginUser(username, password);
+  const user: User = await authService.loginUser(cpr, password);
+
   if (!user) {
     return res
       .status(400)
-      .json({ message: "User not found with this email and password" });
+      .json({ message: "User not found with this cpr and password" });
   }
 
-  const userToken: UserToken = { username: user.username };
+  const userToken: UserToken = { cpr: user.cpr };
 
   const accessToken = authService.generateAccessToken(userToken);
   const refreshToken = authService.generateRefreshToken(userToken);
@@ -50,6 +50,18 @@ authRouter.post("/login", async (req, res) => {
   return res
     .status(201)
     .json({ accessToken: accessToken, refreshToken: refreshToken });
+});
+
+authRouter.delete("/logout", authenticateToken, async (req, res) => {
+  const refreshToken: string = req.body.token;
+  console.log(refreshToken);
+
+  if (!refreshToken)
+    res.status(400).json({ message: "body has to include token" });
+
+  const _ = await authService.deleteRefreshToken(refreshToken);
+
+  res.status(200).json({ message: "OK" });
 });
 
 // TOKENS
@@ -69,7 +81,7 @@ authRouter.post("/token", async (req, res) => {
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
     if (err) return res.status(403).json({ message: err.message });
 
-    const userToken: UserToken = { username: user.name };
+    const userToken: UserToken = { cpr: user.name };
     const accessToken = authService.generateAccessToken(userToken);
 
     res.status(201).json({ accessToken: accessToken });
