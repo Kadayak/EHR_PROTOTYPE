@@ -47,3 +47,7 @@ model Users {
   username       String @id
   hashedPassword String
 }
+
+model RefreshTokens {
+  token String @id
+}

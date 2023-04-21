@@ -1,8 +1,11 @@
 import { Router } from "express";
+
 import * as patientService from "./patients.service.js";
 import { Patient } from "./patient.js";
+import authenticateToken from "../../utils/token_auth.js";
 
 export const patientRouter = Router();
+patientRouter.use(authenticateToken);
 
 patientRouter.get("/", async (req, res) => {
   try {
