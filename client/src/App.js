@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState} from 'react';
 import Navbar from './Navbar';
 import './App.css';
 import PatientCard from './PatientCard';
@@ -7,6 +7,17 @@ import HomePage from './HomePage';
 
 function App() {
   document.title = "Electronic Health Record System";
+  const makeAPICall = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/', {mode:'cors'});
+      const data = await response.json();
+      console.log({ data })
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
+  useEffect(() => {makeAPICall();}, []);
   return (
     <React.Fragment>
       <Navbar/>
