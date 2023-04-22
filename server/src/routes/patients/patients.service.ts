@@ -21,7 +21,7 @@ export const listPatients = async (
 export const getPatient = async (
   cpr: string
 ): Promise<PatientResponse | null> => {
-  return db.patients.findUnique({
+  return await db.patients.findUnique({
     where: {
       cpr: cpr, // can be shortented to just "cpr"
     },

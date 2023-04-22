@@ -2,8 +2,7 @@ import { Router } from "express";
 import jwt from "jsonwebtoken";
 
 import * as authService from "./auth.service.js";
-import { User, UserToken } from "./user.js";
-import authenticateToken from "../../utils/token_auth.js";
+import { User, UserTokenGenerator } from "./user.js";
 
 export const authRouter = Router();
 
@@ -30,6 +29,7 @@ authRouter.post("/signUp", async (req, res) => {
 
 authRouter.post("/login", async (req, res) => {
   const { cpr, password } = req.body;
+
   if (!authService.validateCpr(cpr)) {
     return res.status(400).json({ message: authService.cprRules });
   }
@@ -42,7 +42,7 @@ authRouter.post("/login", async (req, res) => {
       .json({ message: "User not found with this cpr and password" });
   }
 
-  const userToken: UserToken = { cpr: user.cpr };
+  const userToken: UserTokenGenerator = { cpr: user.cpr };
 
   const accessToken = authService.generateAccessToken(userToken);
   const refreshToken = authService.generateRefreshToken(userToken);
@@ -52,14 +52,13 @@ authRouter.post("/login", async (req, res) => {
     .json({ accessToken: accessToken, refreshToken: refreshToken });
 });
 
-authRouter.delete("/logout", authenticateToken, async (req, res) => {
+authRouter.delete("/logout", async (req, res) => {
   const refreshToken: string = req.body.token;
-  console.log(refreshToken);
 
   if (!refreshToken)
     res.status(400).json({ message: "body has to include token" });
 
-  const _ = await authService.deleteRefreshToken(refreshToken);
+  const _ = await authService.deleteRefreshToken(refreshToken); //TODO handle if refresh token was not found -> couldnt be deleted.
 
   res.status(200).json({ message: "OK" });
 });
@@ -81,7 +80,7 @@ authRouter.post("/token", async (req, res) => {
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
     if (err) return res.status(403).json({ message: err.message });
 
-    const userToken: UserToken = { cpr: user.name };
+    const userToken: UserTokenGenerator = { cpr: user.cpr };
     const accessToken = authService.generateAccessToken(userToken);
 
     res.status(201).json({ accessToken: accessToken });

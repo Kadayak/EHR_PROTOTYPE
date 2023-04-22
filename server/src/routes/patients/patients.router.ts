@@ -11,9 +11,8 @@ patientRouter.use(authenticateToken);
 patientRouter.get("/", async (req, res) => {
   try {
     const userCpr = req.user.cpr;
-    console.log(userCpr);
-
     const patients = await patientService.listPatients(userCpr);
+
     return res.status(200).json(patients);
   } catch (error) {
     return res.status(500).json(error.message);
@@ -23,7 +22,9 @@ patientRouter.get("/", async (req, res) => {
 patientRouter.get("/:cpr", async (req, res) => {
   try {
     const { cpr } = req.params;
-    if (validateCpr(cpr)) return res.status(400).json({ message: cprRules });
+    const userCpr = req.user.cpr;
+
+    if (!validateCpr(cpr)) return res.status(400).json({ message: cprRules });
 
     const patient = await patientService.getPatient(cpr);
 
@@ -32,7 +33,12 @@ patientRouter.get("/:cpr", async (req, res) => {
         .status(404)
         .json({ message: `Patient with cpr ${cpr} not found` });
 
-    res.status(200).json(patient);
+    if (patient.homeDoctorCpr !== userCpr)
+      return res
+        .status(403)
+        .json({ message: "Patient is not assigned this doctor" });
+
+    return res.status(200).json(patient);
   } catch (error) {
     return res.status(500).json(error.message);
   }

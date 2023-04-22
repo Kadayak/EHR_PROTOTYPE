@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import { db } from "../../utils/db.server.js";
-import { User, UserToken } from "./user.js";
+import { User, UserTokenGenerator } from "./user.js";
 
 export const signUp = async (cpr: string, password: string) => {
   const hashedPassword: string = await bcrypt.hash(password, 10);
@@ -62,14 +62,14 @@ export const passwordRules = "Password must be ____";
 
 // TOKENS
 
-export const generateAccessToken = (user: UserToken) => {
+export const generateAccessToken = (user: UserTokenGenerator) => {
   const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: "10m",
   });
   return accessToken;
 };
 
-export const generateRefreshToken = (user: UserToken) => {
+export const generateRefreshToken = (user: UserTokenGenerator) => {
   const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
   saveRefreshToken(refreshToken);
   return refreshToken;

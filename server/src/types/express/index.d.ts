@@ -1,9 +1,10 @@
 import express from "express";
+import { UserToken } from "../../routes/auth/user.ts";
 
 declare global {
   namespace Express {
     interface Request {
-      user?: Record<string, any>;
+      user?: UserToken;
     }
   }
 }
