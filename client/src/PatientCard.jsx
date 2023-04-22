@@ -1,10 +1,12 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 const PatientCard = (props) => {
     const{id, firstName, lastName, email, photo, appointment} = props;
     const [clicked, setClicked] = React.useState(true);
     const location = useLocation();
+
     const patients = [
         {
             id: 1,
@@ -76,8 +78,14 @@ const PatientCard = (props) => {
         setClicked(true)
     }
 
+    function getPatients(){
+        let paciente = axios.get('http://localhost:3001/api/patients');
+        console.log(paciente);
+    };
+
     return(
         <React.Fragment>
+            {/*{`${location.pathname}/${patient.id}`}*/ getPatients()}
             <div className="grid grid-cols-4 gap-3 py-4">
                 {patients.map( (patient) => (clicked && 
                 <a href={`${location.pathname}/${patient.id}`} class="text-left block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
