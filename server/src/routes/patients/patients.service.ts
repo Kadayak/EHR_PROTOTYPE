@@ -1,29 +1,36 @@
 import { db } from "../../utils/db.server.js";
 import { Patient, PatientResponse } from "./patient.js";
 
-export const listPatients = async (): Promise<PatientResponse[]> => {
+export const listPatients = async (
+  userCpr: string
+): Promise<PatientResponse[]> => {
   return db.patients.findMany({
+    where: {
+      homeDoctorCpr: userCpr,
+    },
     select: {
-      id: true,
+      cpr: true,
       firstName: true,
       lastName: true,
       birthDate: true,
+      homeDoctorCpr: true,
     },
   });
 };
 
 export const getPatient = async (
-  id: number
+  cpr: string
 ): Promise<PatientResponse | null> => {
-  return db.patients.findUnique({
+  return await db.patients.findUnique({
     where: {
-      id: id, // can be shortented to just "id"
+      cpr: cpr, // can be shortented to just "cpr"
     },
     select: {
-      id: true,
+      cpr: true,
       firstName: true,
       lastName: true,
       birthDate: true,
+      homeDoctorCpr: true,
     },
   });
 };
@@ -33,9 +40,11 @@ export const createPatient = async (
 ): Promise<PatientResponse> => {
   return db.patients.create({
     data: {
+      cpr: patient.cpr,
       firstName: patient.firstName,
       lastName: patient.lastName,
       birthDate: patient.birthDate,
+      homeDoctorCpr: patient.cpr,
     },
   });
 };

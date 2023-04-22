@@ -1,46 +1,88 @@
 import { Router } from "express";
-import {
-  signUp,
-  loginUser,
-  getUser,
-  validatePassword,
-  passwordRules,
-} from "./auth.service.js";
+import jwt from "jsonwebtoken";
+
+import * as authService from "./auth.service.js";
+import { User, UserTokenGenerator } from "./user.js";
 
 export const authRouter = Router();
 
 authRouter.post("/signUp", async (req, res) => {
-  const { username, password } = req.body;
-  if (!username)
+  const { cpr, password } = req.body;
+
+  if (!authService.validateCpr(cpr))
+    return res.status(400).json({ message: authService.cprRules });
+
+  if (!authService.validatePassword(password))
+    return res.status(400).json({ message: authService.passwordRules });
+
+  const userExists = await authService.getUser(cpr);
+  if (userExists)
     return res
       .status(400)
-      .json({ message: "username must be a non-empty string" });
+      .json({ message: `user with cpr ${cpr} already exists` });
 
-  if (!validatePassword(password))
-    return res.status(400).json({ message: passwordRules });
+  const _ = await authService.signUp(cpr, password);
 
-  const userWithUsername = await getUser(username);
-  if (userWithUsername)
-    return res
-      .status(400)
-      .json({ message: `user with username ${username} already exists` });
-
-  const signUpResponse = await signUp(username, password);
-
-  return res.status(201).json(signUpResponse);
+  return res.status(201).json({ message: "User created!" });
+  // return res.status(201).json({ message: _ });
 });
 
 authRouter.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-  if (!username) {
-    return res
-      .status(400)
-      .json({ message: "username must be a non-empty string" });
+  const { cpr, password } = req.body;
+
+  if (!authService.validateCpr(cpr)) {
+    return res.status(400).json({ message: authService.cprRules });
   }
 
-  const auth = await loginUser(username, password);
-  if (!auth) {
-    return res.status(400).json({ message: "Incorrect login information" });
+  const user: User = await authService.loginUser(cpr, password);
+
+  if (!user) {
+    return res
+      .status(400)
+      .json({ message: "User not found with this cpr and password" });
   }
-  return res.status(201).json(auth);
+
+  const userToken: UserTokenGenerator = { cpr: user.cpr };
+
+  const accessToken = authService.generateAccessToken(userToken);
+  const refreshToken = authService.generateRefreshToken(userToken);
+
+  return res
+    .status(201)
+    .json({ accessToken: accessToken, refreshToken: refreshToken });
+});
+
+authRouter.delete("/logout", async (req, res) => {
+  const refreshToken: string = req.body.token;
+
+  if (!refreshToken)
+    res.status(400).json({ message: "body has to include token" });
+
+  const _ = await authService.deleteRefreshToken(refreshToken); //TODO handle if refresh token was not found -> couldnt be deleted.
+
+  res.status(200).json({ message: "OK" });
+});
+
+// TOKENS
+
+authRouter.post("/token", async (req, res) => {
+  const refreshToken = req.body.token;
+  if (!refreshToken)
+    return res.status(401).json({ message: "Refresh token not provided" });
+
+  const refreshTokenExists = await authService.doesRefreshTokenExist(
+    refreshToken
+  );
+
+  if (!refreshTokenExists)
+    return res.status(403).json({ message: "Refresh token incorrect" });
+
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ message: err.message });
+
+    const userToken: UserTokenGenerator = { cpr: user.cpr };
+    const accessToken = authService.generateAccessToken(userToken);
+
+    res.status(201).json({ accessToken: accessToken });
+  });
 });

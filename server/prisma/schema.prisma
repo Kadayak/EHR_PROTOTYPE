@@ -11,39 +11,52 @@ datasource db {
 }
 
 model Patients {
-  id           Int            @id @default(autoincrement())
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  firstName    String
-  lastName     String
-  birthDate    DateTime
+  cpr       String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  firstName String
+  lastName  String
+  birthDate DateTime
+
+  homeDoctor    Doctors @relation(fields: [homeDoctorCpr], references: [cpr])
+  homeDoctorCpr String
+
   Appointments Appointments[]
 }
 
 model Doctors {
-  id           Int            @id @default(autoincrement())
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  firstName    String
-  lastName     String
-  birthDate    DateTime
+  cpr       String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  firstName String
+  lastName  String
+  birthDate DateTime
+
   Appointments Appointments[]
+
+  Patients Patients[]
 }
 
 model Appointments {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
-  patient     Patients @relation(fields: [patientId], references: [id])
-  patientId   Int
-  doctor      Doctors  @relation(fields: [doctorId], references: [id])
-  doctorId    Int
   time        DateTime
   description String
   pending     Boolean  @default(true)
   approved    Boolean
+
+  patient     Patients @relation(fields: [patientsCpr], references: [cpr])
+  patientsCpr String
+
+  doctor     Doctors @relation(fields: [doctorsCpr], references: [cpr])
+  doctorsCpr String
 }
 
 model Users {
-  username       String @id
+  cpr            String @id
   hashedPassword String
+}
+
+model RefreshTokens {
+  token String @id
 }

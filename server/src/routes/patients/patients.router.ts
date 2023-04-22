@@ -1,34 +1,44 @@
 import { Router } from "express";
+
 import * as patientService from "./patients.service.js";
 import { Patient } from "./patient.js";
+import authenticateToken from "../../utils/token_auth.js";
+import { validateCpr, cprRules } from "../auth/auth.service.js";
 
 export const patientRouter = Router();
+patientRouter.use(authenticateToken);
 
 patientRouter.get("/", async (req, res) => {
   try {
-    const patients = await patientService.listPatients();
+    const userCpr = req.user.cpr;
+    const patients = await patientService.listPatients(userCpr);
+
     return res.status(200).json(patients);
   } catch (error) {
     return res.status(500).json(error.message);
   }
 });
 
-patientRouter.get("/:id", async (req, res) => {
+patientRouter.get("/:cpr", async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    if (isNaN(id) || id < 0)
-      return res
-        .status(400)
-        .json({ message: "id has to be a non-negative number" });
+    const { cpr } = req.params;
+    const userCpr = req.user.cpr;
 
-    const patient = await patientService.getPatient(id);
+    if (!validateCpr(cpr)) return res.status(400).json({ message: cprRules });
+
+    const patient = await patientService.getPatient(cpr);
 
     if (!patient)
       return res
         .status(404)
-        .json({ message: `Patient with id ${id} not found` });
+        .json({ message: `Patient with cpr ${cpr} not found` });
 
-    res.status(200).json(patient);
+    if (patient.homeDoctorCpr !== userCpr)
+      return res
+        .status(403)
+        .json({ message: "Patient is not assigned this doctor" });
+
+    return res.status(200).json(patient);
   } catch (error) {
     return res.status(500).json(error.message);
   }
@@ -36,20 +46,17 @@ patientRouter.get("/:id", async (req, res) => {
 
 patientRouter.post("/", async (req, res) => {
   try {
-    const { firstName, lastName, birthDate } = req.body;
+    const { cpr, firstName, lastName, birthDate, homeDoctorCpr } = req.body;
 
-    if (
-      firstName === undefined ||
-      lastName === undefined ||
-      birthDate === undefined
-    )
+    if (!cpr || !firstName || !lastName || !birthDate || !homeDoctorCpr)
       return res.status(400).json({
-        message: "Body has to include firstName, lastName and birthDate",
+        message:
+          "Body has to include cpr, firstName, lastName, birthDate and homeDoctorCpr",
       });
 
-    if (firstName === "" || lastName === "")
+    if (!validateCpr(cpr) || !validateCpr(homeDoctorCpr))
       return res.status(400).json({
-        message: "both firstName and lastName have to be non-empty strings",
+        message: cprRules,
       });
 
     let date: Date = new Date(birthDate);
@@ -60,9 +67,11 @@ patientRouter.post("/", async (req, res) => {
     }
 
     const patient: Patient = {
+      cpr: cpr,
       firstName: firstName,
       lastName: lastName,
       birthDate: date,
+      homeDoctorCpr: homeDoctorCpr,
     };
 
     const patientResponse = await patientService.createPatient(patient);
