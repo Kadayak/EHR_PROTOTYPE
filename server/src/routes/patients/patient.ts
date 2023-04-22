@@ -12,6 +12,13 @@ export type Patient = {
 //   birthDate: string;
 // };
 
+export type PatientRequest = {
+  cpr: string;
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+  homeDoctorCpr: string;
+};
 export type PatientResponse = {
   cpr: string;
   firstName: string;

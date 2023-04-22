@@ -2,13 +2,21 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import { db } from "../../utils/db.server.js";
-import { User, UserTokenGenerator } from "./user.js";
+import {
+  User,
+  UserAuth,
+  UserTokenGenerator,
+  UserEntity,
+  Role,
+  toRole,
+} from "./user.js";
 
-export const signUp = async (cpr: string, password: string) => {
-  const hashedPassword: string = await bcrypt.hash(password, 10);
+export const signUp = async (userAuth: UserAuth) => {
+  const hashedPassword: string = await bcrypt.hash(userAuth.password, 10);
   const user: User = {
-    cpr: cpr,
+    cpr: userAuth.cpr,
     hashedPassword: hashedPassword,
+    role: userAuth.role,
   };
 
   return await saveUser(user);
@@ -16,18 +24,19 @@ export const signUp = async (cpr: string, password: string) => {
 };
 
 const saveUser = async (user: User) => {
-  return db.users.create({
+  return await db.users.create({
     data: {
       cpr: user.cpr,
       hashedPassword: user.hashedPassword,
+      role: user.role,
     },
   });
 };
 
 export const getUser = async (cpr: string) => {
-  return db.users.findUnique({
+  return await db.users.findUnique({
     where: {
-      cpr: cpr, //this should be an Id
+      cpr: cpr,
     },
   });
 };
@@ -36,15 +45,23 @@ export const loginUser = async (
   cpr: string,
   password: string
 ): Promise<User | null> => {
-  const user: User = await getUser(cpr);
+  const userEnt: UserEntity = await getUser(cpr);
 
-  if (!user) return;
+  if (!userEnt) return;
+
+  const user: User = {
+    cpr: userEnt.cpr,
+    hashedPassword: userEnt.hashedPassword,
+    role: toRole(userEnt.role),
+  };
 
   const authorized = await bcrypt.compare(password, user.hashedPassword);
   if (authorized) return user;
 
-  return; // TODO what should we return here?
+  return;
 };
+
+// VALIDATION
 
 export const validateCpr = (cpr: string) => {
   if (!cpr) return false;

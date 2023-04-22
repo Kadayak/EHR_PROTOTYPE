@@ -2,26 +2,60 @@ import { Router } from "express";
 import jwt from "jsonwebtoken";
 
 import * as authService from "./auth.service.js";
-import { User, UserTokenGenerator } from "./user.js";
+import * as patientService from "../patients/patients.service.js";
+import { User, UserTokenGenerator, Role, UserAuth, toRole } from "./user.js";
+import { Patient, PatientRequest } from "../patients/patient.js";
+import { Doctor } from "../doctors/doctor.js";
 
 export const authRouter = Router();
 
 authRouter.post("/signUp", async (req, res) => {
-  const { cpr, password } = req.body;
+  const userAuth: UserAuth = {
+    cpr: req.body.cpr,
+    password: req.body.password,
+    role: req.body.role,
+  };
 
-  if (!authService.validateCpr(cpr))
+  if (!authService.validateCpr(userAuth.cpr))
     return res.status(400).json({ message: authService.cprRules });
 
-  if (!authService.validatePassword(password))
+  if (!authService.validatePassword(userAuth.password))
     return res.status(400).json({ message: authService.passwordRules });
 
-  const userExists = await authService.getUser(cpr);
+  const userExists = await authService.getUser(userAuth.cpr);
   if (userExists)
     return res
       .status(400)
-      .json({ message: `user with cpr ${cpr} already exists` });
+      .json({ message: `user with cpr ${userAuth.cpr} already exists` });
 
-  const _ = await authService.signUp(cpr, password);
+  const _ = await authService.signUp(userAuth);
+
+  // ROLE HANDLING
+
+  const role: Role = toRole(req.body.role); // test this
+
+  if (role === Role.Doctor) {
+    console.log("doctor seen");
+    const doctor: Doctor = {
+      cpr: req.body.cpr,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      birthDate: req.body.birthDate,
+    };
+  } else if (role === Role.Patient) {
+    console.log("patient seen");
+
+    const patient: PatientRequest = {
+      cpr: req.body.cpr,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      birthDate: req.body.birthDate,
+      homeDoctorCpr: req.body.homeDoctorCpr,
+    };
+
+    const response = await patientService.createPatient(res, patient);
+    return response;
+  }
 
   return res.status(201).json({ message: "User created!" });
   // return res.status(201).json({ message: _ });

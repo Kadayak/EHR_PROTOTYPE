@@ -55,6 +55,7 @@ model Appointments {
 model Users {
   cpr            String @id
   hashedPassword String
+  role           String
 }
 
 model RefreshTokens {

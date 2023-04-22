@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import * as patientService from "./patients.service.js";
-import { Patient } from "./patient.js";
+import { Patient, PatientRequest } from "./patient.js";
 import authenticateToken from "../../utils/token_auth.js";
 import { validateCpr, cprRules } from "../auth/auth.service.js";
 
@@ -45,38 +45,18 @@ patientRouter.get("/:cpr", async (req, res) => {
 });
 
 patientRouter.post("/", async (req, res) => {
-  try {
-    const { cpr, firstName, lastName, birthDate, homeDoctorCpr } = req.body;
+  const patientRequest: PatientRequest = {
+    cpr: req.body.cpr,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    birthDate: req.body.birthDate,
+    homeDoctorCpr: req.body.homeDoctorCpr,
+  };
 
-    if (!cpr || !firstName || !lastName || !birthDate || !homeDoctorCpr)
-      return res.status(400).json({
-        message:
-          "Body has to include cpr, firstName, lastName, birthDate and homeDoctorCpr",
-      });
+  const patientResponse = await patientService.createPatient(
+    res,
+    patientRequest
+  );
 
-    if (!validateCpr(cpr) || !validateCpr(homeDoctorCpr))
-      return res.status(400).json({
-        message: cprRules,
-      });
-
-    let date: Date = new Date(birthDate);
-    if (isNaN(Number(date))) {
-      return res
-        .status(400)
-        .json({ message: "birthDate has to be a valid date" });
-    }
-
-    const patient: Patient = {
-      cpr: cpr,
-      firstName: firstName,
-      lastName: lastName,
-      birthDate: date,
-      homeDoctorCpr: homeDoctorCpr,
-    };
-
-    const patientResponse = await patientService.createPatient(patient);
-    return res.status(201).json(patientResponse);
-  } catch (error) {
-    return res.status(500).json(error.message);
-  }
+  return patientResponse;
 });
