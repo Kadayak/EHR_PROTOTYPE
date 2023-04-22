@@ -4,9 +4,15 @@ import './App.css';
 import PatientCard from './PatientCard';
 import {Routes, Route} from 'react-router-dom';
 import HomePage from './HomePage';
+import LoginPage from './LoginPage';
 
 function App() {
   document.title = "Electronic Health Record System";
+  const[cpr, setCpr] = useState('');
+  const[password, setPassword] = useState('');
+  const[loginStatus, setLoginStatus] = useState('');
+
+   
   const makeAPICall = async () => {
     try {
       const response = await fetch('http://localhost:3001/', {mode:'cors'});
@@ -26,6 +32,7 @@ function App() {
           <Routes>
             <Route exact path="/patients" element={<PatientCard/>}></Route>
             <Route exact path="/home" element={<HomePage/>}></Route>
+            <Route exact path="/login" element={<LoginPage/>}></Route>
           </Routes>
         </header>
       </div>
