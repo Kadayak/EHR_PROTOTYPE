@@ -74,9 +74,6 @@ const PatientCard = (props) => {
         }
     ];
 
-    function handleClick(){
-        setClicked(true)
-    }
 
     function getPatients(){
         let paciente = axios.get('http://localhost:3001/api/patients');
