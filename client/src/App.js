@@ -10,9 +10,8 @@ function App() {
   document.title = "Electronic Health Record System";
   const[cpr, setCpr] = useState('');
   const[password, setPassword] = useState('');
-  const[loginStatus, setLoginStatus] = useState('');
+  const[loginStatus, setLoginStatus] = useState(false);
 
-   
   const makeAPICall = async () => {
     try {
       const response = await fetch('http://localhost:3001/', {mode:'cors'});
@@ -23,15 +22,25 @@ function App() {
       console.log(e)
     }
   }
+
   useEffect(() => {makeAPICall();}, []);
+
+  const handleLogin = () => {
+    setLoginStatus(true);
+  }
+
+  const handleLogout = () => {
+    setLoginStatus(false);
+  }
+
   return (
     <React.Fragment>
-      <Navbar/>
+      <Navbar isLoggedIn={loginStatus} handleLogout={handleLogout}/>
       <div className="App">
         <header className="App-header bg-hero bg-cover bg-no-repeat bg-centers">
           <Routes>
+            <Route exact path="" element={<HomePage/>}></Route>
             <Route exact path="/patients" element={<PatientCard/>}></Route>
-            <Route exact path="/home" element={<HomePage/>}></Route>
             <Route exact path="/login" element={<LoginPage/>}></Route>
           </Routes>
         </header>
