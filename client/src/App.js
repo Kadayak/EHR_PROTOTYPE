@@ -2,15 +2,17 @@ import React, { useEffect, useState} from 'react';
 import Navbar from './Navbar';
 import './App.css';
 import PatientCard from './PatientCard';
-import {Routes, Route} from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import HomePage from './HomePage';
 import LoginPage from './LoginPage';
 
 function App() {
+
   document.title = "Electronic Health Record System";
   const[cpr, setCpr] = useState('');
   const[password, setPassword] = useState('');
-  const[loginStatus, setLoginStatus] = useState(false);
+  const[loginStatus, setLoginStatus] = useState(true);
+  const navigate = useNavigate();
 
   const makeAPICall = async () => {
     try {
@@ -30,7 +32,11 @@ function App() {
   }
 
   const handleLogout = () => {
-    setLoginStatus(false);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("isLoggedIn");
+      setLoginStatus(false);
+      navigate("/login");
+    }
   }
 
   return (
