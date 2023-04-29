@@ -1,8 +1,9 @@
 import React, {Fragment} from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useHistory } from "react-router-dom";
 
-const Navbar = ({ isLoggedIn }) => {
+const Navbar = ({isLoggedIn, handleLogout}) => {
   const navigation = [
     { name: "Patients", href: "patients", current: false },
     { name: "Notifications", href: "notifications", current: false },
@@ -21,6 +22,7 @@ const Navbar = ({ isLoggedIn }) => {
   function goToPatients() {
     window.location.href = "/patients";
   }
+
 
   return (
     <React.Fragment>
@@ -92,7 +94,7 @@ const Navbar = ({ isLoggedIn }) => {
                         <img
                           className="h-8 w-8 rounded-full"
                           src="https://freerangestock.com/sample/120140/business-man-profile-vector.jpg"
-                          alt=""
+                          alt="Stock Image"
                         />
                       </Menu.Button>
                     </div>
@@ -142,7 +144,7 @@ const Navbar = ({ isLoggedIn }) => {
                                     active ? "bg-gray-100" : "",
                                     "block px-4 py-2 text-sm text-gray-700"
                                   )}
-                                  onClick={(isLoggedIn = false)}
+                                  onClick= {(e) => handleLogout(e)}
                                 >
                                   Sign out
                                 </a>
