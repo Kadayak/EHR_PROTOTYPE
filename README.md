@@ -89,16 +89,14 @@ To start the server up, you have to have npm on your computer, then in the serve
 
 ### Database
 
-To set up the prisma database, run `npx prisma init --datasource-provider sqlite`. As can be seen in the command, we will use sqlite in this project, so make sure you have installed sqlite on your computer. From there, you will see three commands:
+To get the database running, you must first have an instance of a database to connect to. For this project, we are using Sqlite. If you open up your .env file, you will see that we link to a sqlite file that you might not yet have.
 
-1. Setting the DATABASE_URL in the .env file to point to your database.
-2. Running `prisma db pull` to make our database schema into a prisma schema.
+1. To create your sqlite (.db) file, please run `npx prisma db push`. This command will update your database to match the prisma schema, which can be found in the _./prisma_ folder, which your _dev.db_ file should also be after running the above mentioned command.
+   1.1 As this command also updates the db schema to match the prisma schema, you must run this command after any changes to _schema.prisma_. If you update it, please include it in your commit message, to let others know to update theirs as well.
 
-   2.1 Conversely, running `prisma db push` will update our database schema from our prisma schema.
+2. You can run `prisma generate`to generate a prisma client to connect to our database, but it isn't necessary. I haven't even tried it. I recommend using the Sqlite extension on VSCode marketplace, right-clicking the _dev.db_ file, and pressing "open database".
 
-3. Running `prisma generate`to generate a prisma client to connect to our database.
-
-**After restarts on the database, to seed it, use `npx prisma db seed`. This command will fill the database with seed data.**
+**To seed the database with initial data, use `npx prisma db seed`. This command will fill the database with seed data, found in _./prisma/seed.ts_.**
 
 ### Server
 

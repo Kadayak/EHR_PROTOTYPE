@@ -1,6 +1,6 @@
 node_modules
 # Keep environment variables out of version control
-.env
+# .env // lets keep env on git as its really not too secret right now and will make development easier.
 
 src/dist
 dist
