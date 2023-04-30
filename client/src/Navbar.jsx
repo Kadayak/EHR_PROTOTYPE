@@ -94,7 +94,7 @@ const Navbar = ({isLoggedIn, handleLogout}) => {
                         <img
                           className="h-8 w-8 rounded-full"
                           src="https://freerangestock.com/sample/120140/business-man-profile-vector.jpg"
-                          alt="Stock Image"
+                          alt="Patient silhouette"
                         />
                       </Menu.Button>
                     </div>

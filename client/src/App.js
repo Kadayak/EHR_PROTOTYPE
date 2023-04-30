@@ -1,35 +1,35 @@
-import React, { useEffect, useState} from 'react';
-import Navbar from './Navbar';
-import './App.css';
-import PatientCard from './PatientCard';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import HomePage from './HomePage';
-import LoginPage from './LoginPage';
+import React, { useEffect, useState } from "react";
+import Navbar from "./Navbar";
+import "./App.css";
+import PatientCard from "./PatientCard";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import HomePage from "./HomePage";
+import LoginPage from "./LoginPage";
 
 function App() {
-
   document.title = "Electronic Health Record System";
-  const[cpr, setCpr] = useState('');
-  const[password, setPassword] = useState('');
-  const[loginStatus, setLoginStatus] = useState(true);
+  const [cpr, setCpr] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginStatus, setLoginStatus] = useState(true);
   const navigate = useNavigate();
 
   const makeAPICall = async () => {
     try {
-      const response = await fetch('http://localhost:3001/', {mode:'cors'});
-      const data = await response.json();
-      console.log({ data })
+      // const response = await fetch('http://localhost:3001/', {mode:'cors'});
+      // const data = await response.json();
+      // console.log({ data })
+    } catch (e) {
+      console.log(e);
     }
-    catch (e) {
-      console.log(e)
-    }
-  }
+  };
 
-  useEffect(() => {makeAPICall();}, []);
+  useEffect(() => {
+    makeAPICall();
+  }, []);
 
   const handleLogin = () => {
     setLoginStatus(true);
-  }
+  };
 
   const handleLogout = () => {
     if (typeof window !== "undefined") {
@@ -37,17 +37,17 @@ function App() {
       setLoginStatus(false);
       navigate("/login");
     }
-  }
+  };
 
   return (
     <React.Fragment>
-      <Navbar isLoggedIn={loginStatus} handleLogout={handleLogout}/>
+      <Navbar isLoggedIn={loginStatus} handleLogout={handleLogout} />
       <div className="App">
         <header className="App-header bg-hero bg-cover bg-no-repeat bg-centers">
           <Routes>
-            <Route exact path="" element={<HomePage/>}></Route>
-            <Route exact path="/patients" element={<PatientCard/>}></Route>
-            <Route exact path="/login" element={<LoginPage/>}></Route>
+            <Route exact path="" element={<HomePage />}></Route>
+            <Route exact path="/patients" element={<PatientCard />}></Route>
+            <Route exact path="/login" element={<LoginPage />}></Route>
           </Routes>
         </header>
       </div>
