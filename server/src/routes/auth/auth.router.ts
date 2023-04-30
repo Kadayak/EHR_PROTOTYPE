@@ -3,9 +3,10 @@ import jwt from "jsonwebtoken";
 
 import * as authService from "./auth.service.js";
 import * as patientService from "../patients/patients.service.js";
+import * as doctorService from "../doctors/doctors.service.js";
 import { User, UserTokenGenerator, Role, UserAuth, toRole } from "./user.js";
 import { Patient, PatientRequest } from "../patients/patient.js";
-import { Doctor } from "../doctors/doctor.js";
+import { Doctor, DoctorRequest } from "../doctors/doctor.js";
 
 export const authRouter = Router();
 
@@ -31,17 +32,19 @@ authRouter.post("/signUp", async (req, res) => {
   const _ = await authService.signUp(userAuth);
 
   // ROLE HANDLING
-
   const role: Role = toRole(req.body.role); // test this
 
   if (role === Role.Doctor) {
     console.log("doctor seen");
-    const doctor: Doctor = {
+    const doctor: DoctorRequest = {
       cpr: req.body.cpr,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       birthDate: req.body.birthDate,
     };
+
+    const response = await doctorService.createDoctor(res, doctor);
+    return response;
   } else if (role === Role.Patient) {
     console.log("patient seen");
 
@@ -57,8 +60,7 @@ authRouter.post("/signUp", async (req, res) => {
     return response;
   }
 
-  return res.status(201).json({ message: "User created!" });
-  // return res.status(201).json({ message: _ });
+  return res.status(404).json({ message: `Role ${role} not found` });
 });
 
 authRouter.post("/login", async (req, res) => {
