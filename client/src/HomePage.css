@@ -1,5 +1,5 @@
 .HomePage {
-  max-width: 1200px;
+  max-width: auto;
   margin: 0 auto;
   padding: 20px;
 }
@@ -61,7 +61,7 @@
 }
 
 .HomePage {
-  max-width: 1200px;
+  max-width: auto;
   margin: 0 auto;
   padding: 20px;
 }
@@ -75,10 +75,12 @@
 
 .HeroCard {
   display: flex;
+  flex-wrap: wrap-reverse;
   align-items: center;
+  justify-content: center;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 400px;
+  min-height: 400px;
   width: 800px;
   overflow: hidden;
 }
@@ -88,12 +90,15 @@
   text-align: center;
   position: relative;
   z-index: 2;
-  flex-basis: 50%;
+  flex-basis: 50%; /* Decreased from 50% */
   padding: 20px;
+  max-height: 400px;
+  width: auto;
+  max-width: 100%;
 }
 
 .HeroCardContent h1 {
-  font-size: 50px;
+  font-size: 40px;
   margin-bottom: 20px;
 }
 
@@ -104,11 +109,11 @@
 .HeroCardImage {
   background-size: cover;
   background-position: center;
-  flex-basis: 50%;
+  flex-basis: 70%;
 }
 
 .HeroContent {
-  color: #fff;
+  color: #ffffff;
   text-align: center;
 }
 
@@ -121,4 +126,16 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+}
+
+.CardButton {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: lightseagreen;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
 }

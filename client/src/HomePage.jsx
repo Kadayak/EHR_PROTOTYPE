@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./HomePage.css";
 import heroImage from "./images/bg_hero.jpg";
 import featureImage1 from "./images/feature-image-1.jpg";
@@ -13,9 +14,16 @@ function HomePage() {
           <div className="HeroCardContent">
             <h1>Welcome to our EHR System</h1>
             <p>Manage your health records easily and securely</p>
-            <button>Get Started</button>
+            <button className="CardButton" style={{ backgroundColor: "lightcoral" }}>
+              <Link
+                to="/login"
+                style={{ color: "white", textDecoration: "none" }}
+              >
+                Get Started
+              </Link>
+            </button>
           </div>
-          <div className="HeroCardImage" style={{ backgroundImage: `url(${heroImage})` }}></div>
+          <img src={heroImage} alt="hero" className="HeroCardImage basis-1/4 md:basis-1/3" />
         </div>
       </section>
       <section className="FeaturesSection">
@@ -23,19 +31,28 @@ function HomePage() {
           <div className="Card">
             <img src={featureImage1} alt="feature 1" className="CardImage" />
             <h2 className="CardTitle">Easy to Use</h2>
-            <p className="CardDescription">Our system is user-friendly and easy to navigate, making it simple to manage your health records.</p>
+            <p className="CardDescription">
+              Our system is user-friendly and easy to navigate, making it simple
+              to manage your health records.
+            </p>
             <button className="CardButton">Learn More</button>
           </div>
           <div className="Card">
             <img src={featureImage2} alt="feature 2" className="CardImage" />
             <h2 className="CardTitle">Secure and Private</h2>
-            <p className="CardDescription">Your health records are stored securely and privately, with advanced encryption and security measures.</p>
+            <p className="CardDescription">
+              Your health records are stored securely and privately, with
+              advanced encryption and the most modern security measures.
+            </p>
             <button className="CardButton">Learn More</button>
           </div>
           <div className="Card">
             <img src={featureImage3} alt="feature 3" className="CardImage" />
             <h2 className="CardTitle">Accessible Anywhere</h2>
-            <p className="CardDescription">With our system, you can access your health records from anywhere, at any time, using any device.</p>
+            <p className="CardDescription">
+              With our system, you can access your health records from anywhere,
+              at any time, using any device.
+            </p>
             <button className="CardButton">Learn More</button>
           </div>
         </div>
