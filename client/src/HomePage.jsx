@@ -1,23 +1,70 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import "./HomePage.css";
+import heroImage from "./images/bg_hero.jpg";
+import featureImage1 from "./images/feature-image-1.jpg";
+import featureImage2 from "./images/feature-image-2.jpg";
+import featureImage3 from "./images/feature-image-3.jpg";
 
-const HomePage = () => {
-
-    return (
-        <React.Fragment>
-            <div className="flex flex-col h-full w-full">
-                <div className="flex justify-center">
-                    <div className="flex flex-col rounded-lg bg-white shadow-lg dark:bg-neutral-700 md:max-w-xl md:flex-row">
-                        <img className="h-96 w-full rounded-t-lg object-cover md:h-auto md:w-48 md:rounded-none md:rounded-l-lg" src="https://mdbootstrap.com/wp-content/uploads/2020/06/vertical.jpg" alt="" />
-                        <div className="flex flex-col justify-start p-6">
-                            <h5 className="mb-2 text-xl font-medium text-neutral-800 dark:text-neutral-50"> Card title </h5>
-                            <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <p className="text-xs text-neutral-500 dark:text-neutral-300">Last updated 3 mins ago</p>
-                        </div>
-                    </div>
-                </div>
+function HomePage() {
+  return (
+    <div className="HomePage">
+      <section className="HeroSection">
+        <div className="HeroCard">
+          <div className="HeroCardContent">
+            <h1>Welcome to our EHR System</h1>
+            <p>Manage your health records easily and securely</p>
+            <button className="CardButton" style={{ backgroundColor: "lightcoral" }}>
+              <Link
+                to="/login"
+                style={{ color: "white", textDecoration: "none" }}
+              >
+                Get Started
+              </Link>
+            </button>
+          </div>
+          <img src={heroImage} alt="hero" className="HeroCardImage basis-1/4 md:basis-1/3" />
+        </div>
+      </section>
+      <section className="FeaturesSection">
+        <div className="FeatureContainer">
+          <div className="Card">
+            <img src={featureImage1} alt="feature 1" className="CardImage" />
+            <div className="CardTextContainer">
+              <h2 className="CardTitle">Easy to Use</h2>
+              <p className="CardDescription">
+                Our system is user-friendly and easy to navigate, making it simple
+                to manage your health records.
+              </p>
+              <button className="CardButton">Learn More</button>
             </div>
-        </React.Fragment>
-    );
+          </div>
+          <div className="Card">
+            <img src={featureImage2} alt="feature 2" className="CardImage" />
+            <div className="CardTextContainer">
+              <h2 className="CardTitle">Secure and Private</h2>
+              <p className="CardDescription">
+                Your health records are stored securely and privately, with
+                advanced encryption and the most modern security measures.
+              </p>
+              <button className="CardButton">Learn More</button>
+            </div>
+          </div>
+          <div className="Card">
+            <img src={featureImage3} alt="feature 3" className="CardImage" />
+            <div className="CardTextContainer">
+              <h2 className="CardTitle">Accessible Anywhere</h2>
+              <p className="CardDescription">
+                With our system, you can access your health records from anywhere,
+                at any time, using any device.
+              </p>
+              <button className="CardButton">Learn More</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
 }
 
 export default HomePage;

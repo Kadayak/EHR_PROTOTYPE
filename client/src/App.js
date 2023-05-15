@@ -10,7 +10,7 @@ function App() {
   document.title = "Electronic Health Record System";
   const [cpr, setCpr] = useState("");
   const [password, setPassword] = useState("");
-  const [loginStatus, setLoginStatus] = useState(true);
+  const [loginStatus, setLoginStatus] = useState(false);
   const navigate = useNavigate();
 
   const makeAPICall = async () => {
@@ -28,22 +28,28 @@ function App() {
   }, []);
 
   const handleLogin = () => {
-    setLoginStatus(true);
+    
+    if(typeof window !== "undefined") {
+      localStorage.setItem("isLoggedIn", true);
+      setLoginStatus(true);
+      navigate("login")
+    }
   };
 
   const handleLogout = () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("isLoggedIn");
       setLoginStatus(false);
-      navigate("/login");
+      navigate("/");
     }
   };
 
+
   return (
     <React.Fragment>
-      <Navbar isLoggedIn={loginStatus} handleLogout={handleLogout} />
+      <Navbar isLoggedIn={loginStatus} handleLogout={handleLogout} handleLogin={handleLogin} />
       <div className="App">
-        <header className="App-header bg-hero bg-cover bg-no-repeat bg-centers">
+        <header className={ window.location.href !== "http://localhost:3000/" ? "App-header bg-hero bg-cover bg-no-repeat bg-centers" : "heading"}>
           <Routes>
             <Route exact path="" element={<HomePage />}></Route>
             <Route exact path="/patients" element={<PatientCard />}></Route>
