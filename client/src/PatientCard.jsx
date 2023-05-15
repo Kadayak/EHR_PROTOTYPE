@@ -41,7 +41,7 @@ const PatientCard = (props) => {
             appointment: "2023-04-15 13:00:00"
         },
         {
-            id: 1,
+            id: 5,
             firstName: "John",
             lastName: "Doe",
             email: "jhond@outlook.com",
@@ -49,7 +49,7 @@ const PatientCard = (props) => {
             appointment: "2023-05-01 10:00:00"
         },
         {
-            id: 2,
+            id: 6,
             firstName: "Irma",
             lastName: "Sjöberg",
             email: "irma_sjoberg@gmail.com",
@@ -57,7 +57,7 @@ const PatientCard = (props) => {
             appointment: "2023-04-03 12:00:00"
         },
         {
-            id: 3,
+            id: 7,
             firstName: "Alexander",
             lastName: "Black",
             email: "alex_b@gmail.com",
@@ -65,7 +65,7 @@ const PatientCard = (props) => {
             appointment: "2023-03-30 10:30:00"
         },
         {
-            id: 4,
+            id: 8,
             firstName: "Laura",
             lastName: "Chang",
             email: "lchang2@gmail.com",
@@ -85,7 +85,7 @@ const PatientCard = (props) => {
             {/*{`${location.pathname}/${patient.id}`}*/ getPatients()}
             <div className="grid grid-cols-4 gap-3 py-4">
                 {patients.map( (patient) => (clicked && 
-                <a href={location.pathname === 'http://localhost:3000/patients' ? location.pathname + patient.id : `http://localhost:3000/patients/${patient.id}`} class="text-left block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                <a href={location.pathname === 'http://localhost:3000/patients/' ? location.pathname + patient.id : `http://localhost:3000/patients/${patient.id}`} class="text-left block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                     <img className="object-cover object-center w-full h-56 mb-6 rounded-lg" src={patient.photo} alt="avatar" />
                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{patient.firstName} {patient.lastName}</h5>
                     <p className="text-2xl font-normal text-gray-700 dark:text-gray-400">Email: {patient.email}</p>
