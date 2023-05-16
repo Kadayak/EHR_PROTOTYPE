@@ -1,86 +1,12 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import patients from "C:/React/f_react/client/src/data/patients.json";
 
 const PatientCard = (props) => {
   const { id, firstName, lastName, email, photo, appointment } = props;
   const [clicked, setClicked] = React.useState(true);
   const location = useLocation();
-
-  const patients = [
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      email: "jhond@outlook.com",
-      photo:
-        "https://freerangestock.com/sample/120140/business-man-profile-vector.jpg",
-      appointment: "2023-05-01 10:00:00",
-    },
-    {
-      id: 2,
-      firstName: "Irma",
-      lastName: "Sjöberg",
-      email: "irma_sjoberg@gmail.com",
-      photo:
-        "https://freerangestock.com/sample/120140/business-man-profile-vector.jpg",
-      appointment: "2023-04-03 12:00:00",
-    },
-    {
-      id: 3,
-      firstName: "Alexander",
-      lastName: "Black",
-      email: "alex_b@gmail.com",
-      photo:
-        "https://freerangestock.com/sample/120140/business-man-profile-vector.jpg",
-      appointment: "2023-03-30 10:30:00",
-    },
-    {
-      id: 4,
-      firstName: "Laura",
-      lastName: "Chang",
-      email: "lchang2@gmail.com",
-      photo:
-        "https://freerangestock.com/sample/120140/business-man-profile-vector.jpg",
-      appointment: "2023-04-15 13:00:00",
-    },
-    {
-      id: 5,
-      firstName: "John",
-      lastName: "Doe",
-      email: "jhond@outlook.com",
-      photo:
-        "https://freerangestock.com/sample/120140/business-man-profile-vector.jpg",
-      appointment: "2023-05-01 10:00:00",
-    },
-    {
-      id: 6,
-      firstName: "Irma",
-      lastName: "Sjöberg",
-      email: "irma_sjoberg@gmail.com",
-      photo:
-        "https://freerangestock.com/sample/120140/business-man-profile-vector.jpg",
-      appointment: "2023-04-03 12:00:00",
-    },
-    {
-      id: 7,
-      firstName: "Alexander",
-      lastName: "Black",
-      email: "alex_b@gmail.com",
-      photo:
-        "https://freerangestock.com/sample/120140/business-man-profile-vector.jpg",
-      appointment: "2023-03-30 10:30:00",
-    },
-    {
-      id: 8,
-      firstName: "Laura",
-      lastName: "Chang",
-      email: "lchang2@gmail.com",
-      photo:
-        "https://freerangestock.com/sample/120140/business-man-profile-vector.jpg",
-      appointment: "2023-04-15 13:00:00",
-    },
-  ];
 
   function getPatients() {
     let paciente = axios.get("http://localhost:3001/api/patients");
@@ -89,7 +15,6 @@ const PatientCard = (props) => {
 
   return (
     <React.Fragment>
-      {/*{`${location.pathname}/${patient.id}`}*/ getPatients()}
       <div className="grid grid-cols-4 gap-3 py-4">
         {patients.map(
           (patient) =>

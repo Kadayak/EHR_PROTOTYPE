@@ -1,6 +1,20 @@
 import React from 'react';
+import axios from 'axios';
 
 const LoginPage = () => {
+
+    async function login() 
+    {
+        console.log("Login Started");
+        const response = await axios.post("http://localhost:3001/api/auth/login/", {
+                cpr: '030502-8282',
+                password: 'mypassoword'
+            }).then((response) => {
+                console.log(response);
+            }).catch((error) => {
+                console.log(error.response.data);
+            });
+    }
 
     
     return(
@@ -21,7 +35,7 @@ const LoginPage = () => {
             <p className="text-red-500 text-xs italic">Please choose a password.</p>
             </div>
             <div className="flex items-center justify-between">
-            <button className="bg-blue-500 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+            <button className="bg-blue-500 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onClick={login}>
                 Sign In
             </button>
             <a className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">

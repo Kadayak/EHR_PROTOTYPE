@@ -32,7 +32,7 @@ function App() {
     if(typeof window !== "undefined") {
       localStorage.setItem("isLoggedIn", true);
       setLoginStatus(true);
-      navigate("login")
+      navigate("/login")
     }
   };
 
