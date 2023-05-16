@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "./Navbar";
+import Navbar from "./components/Navbar";
 import "./App.css";
-import PatientCard from "./PatientCard";
+import PatientCard from "./pages/Patient/PatientCard";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import HomePage from "./HomePage";
-import LoginPage from "./LoginPage";
+import HomePage from "./pages/Home/HomePage";
+import LoginPage from "./pages/Login/LoginPage";
 
 function App() {
   document.title = "Electronic Health Record System";
