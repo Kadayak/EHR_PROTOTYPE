@@ -8,11 +8,6 @@ const PatientCard = (props) => {
   const [clicked, setClicked] = React.useState(true);
   const location = useLocation();
 
-  function getPatients() {
-    let paciente = axios.get("http://localhost:3001/api/patients");
-    console.log(paciente);
-  }
-
   return (
     <React.Fragment>
       <div className="grid grid-cols-4 gap-3 py-4">
