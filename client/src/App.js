@@ -1,66 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import "./App.css";
-import PatientCard from "./pages/Patient/PatientCard";
-import { Routes, Route, useNavigate } from "react-router-dom";
 import HomePage from "./pages/Home/HomePage";
+import PatientCard from "./pages/Patient/PatientCard";
 import LoginPage from "./pages/Login/LoginPage";
 import SignUpPage from "./pages/Signup/SignUpPage";
 
-function App() {
-  document.title = "Electronic Health Record System";
-  const [cpr, setCpr] = useState("");
-  const [password, setPassword] = useState("");
-  const [loginStatus, setLoginStatus] = useState(false);
-  const navigate = useNavigate();
-
-  const makeAPICall = async () => {
-    try {
-      // const response = await fetch('http://localhost:3001/', {mode:'cors'});
-      // const data = await response.json();
-      // console.log({ data })
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    makeAPICall();
-  }, []);
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = () => {
-    
-    if(typeof window !== "undefined") {
-      localStorage.setItem("isLoggedIn", true);
-      setLoginStatus(true);
-      navigate("/login")
-    }
+    //setIsLoggedIn(true);
+    console.log("Logged in");
   };
 
   const handleLogout = () => {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("isLoggedIn");
-      setLoginStatus(false);
-      navigate("/");
-    }
+    setIsLoggedIn(false);
   };
-
 
   return (
     <React.Fragment>
-      <Navbar isLoggedIn={loginStatus} handleLogout={handleLogout} handleLogin={handleLogin} />
+      <Navbar
+        isLoggedIn={isLoggedIn}
+        handleLogout={handleLogout}
+        handleLogin={handleLogin}
+      />
       <div className="App">
-        <header className={ window.location.href !== "http://localhost:3000/" ? "App-header bg-hero bg-cover bg-no-repeat bg-centers" : "heading"}>
+        <header
+          className={
+            window.location.href !== "http://localhost:3000/"
+              ? "App-header bg-hero bg-cover bg-no-repeat bg-centers"
+              : "heading"
+          }
+        >
           <Routes>
-            <Route exact path="" element={<HomePage />}></Route>
-            <Route exact path="/patients" element={<PatientCard />}></Route>
-            <Route exact path="/login" element={<LoginPage />}></Route>
-            <Route exact path="/signup" element={<SignUpPage/>}></Route>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/patients" element={<PatientCard />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
           </Routes>
         </header>
       </div>
     </React.Fragment>
   );
-}
+};
 
 export default App;
