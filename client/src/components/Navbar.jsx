@@ -1,26 +1,18 @@
 import React, { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
   const navigation = [
-    { name: "Patients", href: "patients", current: false },
-    { name: "Notifications", href: "notifications", current: false },
-    { name: "Projects", href: "projects", current: false },
-    { name: "Calendar", href: "calendar", current: false },
+    { name: "Patients", href: "/patients", current: false },
+    { name: "Notifications", href: "/notifications", current: false },
+    { name: "Projects", href: "/projects", current: false },
+    { name: "Calendar", href: "/calendar", current: false },
   ];
-
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
 
   function goToHome() {
     window.location.href = "/";
-  }
-
-  function goToPatients() {
-    window.location.href = "/patients";
   }
 
   return (
@@ -61,19 +53,20 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
                   <div className="hidden sm:ml-6 sm:block">
                     <div className="flex space-x-4">
                       {navigation.map((item) => (
-                        <a
+                        <Link
                           key={item.name}
-                          href={item.href}
-                          className={classNames(
-                            item.current
-                              ? "bg-gray-900 text-white"
-                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                            "rounded-md px-3 py-2 text-sm font-medium"
-                          )}
-                          aria-current={item.current ? "page" : undefined}
+                          to={item.href}
+                          className={`
+                            ${
+                              item.current
+                                ? "bg-gray-900 text-white"
+                                : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                            }
+                            rounded-md px-3 py-2 text-sm font-medium
+                          `}
                         >
                           {item.name}
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
@@ -86,110 +79,85 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
                     <span className="sr-only">View notifications</span>
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
-                  <Menu as="div" className="relative ml-3">
-                    <div>
-                      <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                        <span className="sr-only">Open user menu</span>
-                        <img
-                          className="h-8 w-8 rounded-full"
-                          src="https://freerangestock.com/sample/120140/business-man-profile-vector.jpg"
-                          alt="Patient silhouette"
-                        />
-                      </Menu.Button>
-                    </div>
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-100"
-                      enterFrom="transform opacity-0 scale-95"
-                      enterTo="transform opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="transform opacity-100 scale-100"
-                      leaveTo="transform opacity-0 scale-95"
-                    >
-                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        {isLoggedIn ? (
-                          <>
-                            <Menu.Item>
-                              {({ active }) => (
-                                <a
-                                  href="profile"
-                                  className={classNames(
-                                    active ? "bg-gray-100" : "",
-                                    "block px-4 py-2 text-sm text-gray-700"
-                                  )}
-                                >
-                                  Your Profile
-                                </a>
-                              )}
-                            </Menu.Item>
-                            <Menu.Item>
-                              {({ active }) => (
-                                <a
-                                  href="settings"
-                                  className={classNames(
-                                    active ? "bg-gray-100" : "",
-                                    "block px-4 py-2 text-sm text-gray-700"
-                                  )}
-                                >
-                                  Settings
-                                </a>
-                              )}
-                            </Menu.Item>
-                            <Menu.Item>
-                              {({ active }) => (
-                                <a
-                                  href=""
-                                  className={classNames(
-                                    active ? "bg-gray-100" : "",
-                                    "block px-4 py-2 text-sm text-gray-700"
-                                  )}
-                                  onClick={(e) => handleLogout(e)}
-                                >
-                                  Sign out
-                                </a>
-                              )}
-                            </Menu.Item>
-                          </>
-                        ) : (
+
+                  {isLoggedIn ? (
+                    <Menu as="div" className="ml-3 relative">
+                      <div>
+                        <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800">
+                          <span className="sr-only">Open user menu</span>
+                          <img
+                            className="h-8 w-8 rounded-full"
+                            src="user-avatar.jpg"
+                            alt="User Avatar"
+                          />
+                        </Menu.Button>
+                      </div>
+                      <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                      >
+                        <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                           <Menu.Item>
                             {({ active }) => (
-                              <a
-                                href="/login"
-                                className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                )}
-                                onClick={(e) => handleLogin(e)}
+                              <Link
+                                to="/profile"
+                                className={`${
+                                  active ? "bg-gray-100" : ""
+                                } block px-4 py-2 text-sm text-gray-700`}
                               >
-                                Log In
-                              </a>
+                                Your Profile
+                              </Link>
                             )}
                           </Menu.Item>
-                        )}
-                      </Menu.Items>
-                    </Transition>
-                  </Menu>
+                          <Menu.Item>
+                            {({ active }) => (
+                              <button
+                                onClick={handleLogout}
+                                className={`${
+                                  active ? "bg-gray-100" : ""
+                                } block px-4 py-2 text-sm text-gray-700 w-full text-left`}
+                              >
+                                Sign out
+                              </button>
+                            )}
+                          </Menu.Item>
+                        </Menu.Items>
+                      </Transition>
+                    </Menu>
+                  ) : (
+                    <button
+                      onClick={handleLogin}
+                      className="bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 rounded-full"
+                    >
+                      Log in
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
 
             <Disclosure.Panel className="sm:hidden">
-              <div className="space-y-1 px-2 pt-2 pb-3">
+              <div className="px-2 pt-2 pb-3 space-y-1">
                 {navigation.map((item) => (
-                  <Disclosure.Button
+                  <Link
                     key={item.name}
-                    as="a"
-                    href={item.href}
-                    className={classNames(
-                      item.current
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                      "block rounded-md px-3 py-2 text-base font-medium"
-                    )}
-                    aria-current={item.current ? "page" : undefined}
+                    to={item.href}
+                    className={`
+                      ${
+                        item.current
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                      }
+                      block px-3 py-2 text-base font-medium rounded-md
+                    `}
                   >
                     {item.name}
-                  </Disclosure.Button>
+                  </Link>
                 ))}
               </div>
             </Disclosure.Panel>
