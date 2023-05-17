@@ -16,7 +16,7 @@ function HomePage() {
             <p>Manage your health records easily and securely</p>
             <button
               className="CardButton"
-              style={{ backgroundColor: "lightcoral" }}
+              style={{ backgroundColor: "darksalmon" }}
             >
               <Link
                 to="/login"

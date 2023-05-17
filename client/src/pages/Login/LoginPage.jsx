@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 
 const LoginPage = () => {
+  const [cpr, setCPR] = useState("");
+  const [password, setPassword] = useState("");
+  const [cprError, setCPRError] = useState("");
+
   async function login() {
     console.log("Login Started");
+
+    if (!validateCPR(cpr)) {
+      setCPRError("Invalid CPR number format");
+      return;
+    }
+
     const response = await axios
       .post("http://localhost:3001/api/auth/login/", {
-        cpr: "0101802022",
+        cpr: cpr,
         password: "strong_password",
       })
       .then((response) => {
@@ -16,6 +26,17 @@ const LoginPage = () => {
       .catch((error) => {
         console.log(error.response.data);
       });
+  }
+
+  function handleCPRChange(event) {
+    const inputValue = event.target.value;
+    setCPR(inputValue);
+    setCPRError(""); // Clear any previous error message
+  }
+
+  function validateCPR(cpr) {
+    const cprRegex = /^\d{6}-\d{4}$/;
+    return cprRegex.test(cpr);
   }
 
   return (
@@ -33,8 +54,14 @@ const LoginPage = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
-              placeholder="CPR Number"
+              pattern="\d{4}-\d{4}"
+              placeholder="xxxx-xxxx"
+              value={cpr}
+              onChange={handleCPRChange}
             ></input>
+            {cprError && (
+              <p className="text-red-500 text-xs italic">{cprError}</p>
+            )}
           </div>
           <div className="mb-6">
             <label
@@ -73,7 +100,7 @@ const LoginPage = () => {
             <span className="flex-shrink mx-4 text-gray-400 text-xs">
               New to EHR Solutions?
             </span>
-            <div class="flex-grow border-t border-gray-400"></div>
+            <div className="flex-grow border-t border-gray-400"></div>
           </div>
           <div className="flex items-center justify-between">
             <button className="bg-gray-200 hover:bg-gray-300 text-black font-mono py-2 px-4 rounded focus:outline-black focus:shadow-outline w-full text-base">
