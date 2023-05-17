@@ -20,27 +20,27 @@ const App = () => {
 
   return (
     <React.Fragment>
-        <Navbar
-          isLoggedIn={isLoggedIn}
-          handleLogout={handleLogout}
-          handleLogin={handleLogin}
-        />
-        <div className="App">
-          <header
-            className={
-              window.location.href !== "http://localhost:3000/"
-                ? "App-header bg-hero bg-cover bg-no-repeat bg-centers"
-                : "heading"
-            }
-          >
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/patients" element={<PatientCard />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignUpPage />} />
-            </Routes>
-          </header>
-        </div>
+      <Navbar
+        isLoggedIn={isLoggedIn}
+        handleLogout={handleLogout}
+        handleLogin={handleLogin}
+      />
+      <div className="App">
+        <header
+          className={
+            window.location.href !== "http://localhost:3000/"
+              ? "App-header bg-hero bg-cover bg-no-repeat bg-centers"
+              : "heading"
+          }
+        >
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/patients" element={<PatientCard />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+          </Routes>
+        </header>
+      </div>
     </React.Fragment>
   );
 };

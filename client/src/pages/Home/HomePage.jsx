@@ -14,7 +14,10 @@ function HomePage() {
           <div className="HeroCardContent">
             <h1>Welcome to our EHR System</h1>
             <p>Manage your health records easily and securely</p>
-            <button className="CardButton" style={{ backgroundColor: "lightcoral" }}>
+            <button
+              className="CardButton"
+              style={{ backgroundColor: "lightcoral" }}
+            >
               <Link
                 to="/login"
                 style={{ color: "white", textDecoration: "none" }}
@@ -23,7 +26,9 @@ function HomePage() {
               </Link>
             </button>
           </div>
-          <img src={heroImage} alt="hero" className="HeroCardImage basis-1/4 md:basis-1/3" />
+          <div className="HeroCardImageContainer">
+            <img src={heroImage} alt="hero" className="HeroCardImage" />
+          </div>
         </div>
       </section>
       <section className="FeaturesSection">
@@ -33,8 +38,8 @@ function HomePage() {
             <div className="CardTextContainer">
               <h2 className="CardTitle">Easy to Use</h2>
               <p className="CardDescription">
-                Our system is user-friendly and easy to navigate, making it simple
-                to manage your health records.
+                Our system is user-friendly and easy to navigate, making it
+                simple to manage your health records.
               </p>
               <button className="CardButton">Learn More</button>
             </div>
@@ -55,8 +60,8 @@ function HomePage() {
             <div className="CardTextContainer">
               <h2 className="CardTitle">Accessible Anywhere</h2>
               <p className="CardDescription">
-                With our system, you can access your health records from anywhere,
-                at any time, using any device.
+                With our system, you can access your health records from
+                anywhere, at any time, using any device.
               </p>
               <button className="CardButton">Learn More</button>
             </div>
