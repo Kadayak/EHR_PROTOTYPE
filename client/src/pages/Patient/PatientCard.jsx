@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import patients from "C:/React/f_react/client/src/data/patients.json";
+import patients from "../../data/patients.json";
 
 const PatientCard = (props) => {
   const { id, firstName, lastName, email, photo, appointment } = props;

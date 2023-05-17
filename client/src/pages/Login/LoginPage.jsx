@@ -6,6 +6,8 @@ const LoginPage = () => {
   const [cpr, setCPR] = useState("");
   const [password, setPassword] = useState("");
   const [cprError, setCPRError] = useState("");
+  const [passwordError, setPasswordError] = useState("Please choose a password");
+  const [passwordIsValid, setPasswordValid] = useState(false);
 
   async function login() {
     console.log("Login Started");
@@ -15,10 +17,17 @@ const LoginPage = () => {
       return;
     }
 
+    if (!validatePassword(password)) {
+      return;
+    }
+
+    console.log(cpr)
+    console.log(password)
+
     const response = await axios
       .post("http://localhost:3001/api/auth/login/", {
         cpr: cpr,
-        password: "strong_password",
+        password: password,
       })
       .then((response) => {
         console.log(response);
@@ -33,12 +42,34 @@ const LoginPage = () => {
     setCPR(inputValue);
     setCPRError(""); // Clear any previous error message
   }
-
+  
   function validateCPR(cpr) {
-    const cprRegex = /^\d{6}-\d{4}$/;
+    const cprRegex = /^\d{6}\d{4}$/;
     return cprRegex.test(cpr);
   }
+  
+  function handlePasswordChange(event) {
+    const inputValue = event.target.value;
+    setPassword(inputValue)
 
+    if (!validatePassword()) {
+      setPasswordValid(false);
+      setPasswordError("Invalid password format");
+      return;
+    }
+
+    else {
+      setPasswordValid(true);
+      setPasswordError("");
+    }
+  }
+
+  function validatePassword() {
+    if (password === "") return false
+    if (password.length < 2) return false
+    return true;
+  }
+  
   return (
     <React.Fragment>
       <div className="flex flex-col items-center justify-center h-screen">
@@ -55,7 +86,7 @@ const LoginPage = () => {
               id="username"
               type="text"
               pattern="\d{4}-\d{4}"
-              placeholder="xxxx-xxxx"
+              placeholder="xxxxxx-xxxx"
               value={cpr}
               onChange={handleCPRChange}
             ></input>
@@ -71,13 +102,14 @@ const LoginPage = () => {
               Password
             </label>
             <input
-              className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline ${!passwordIsValid && "border-red-500"}`}
               id="password"
               type="password"
               placeholder="******************"
+              onChange={handlePasswordChange}
             ></input>
             <p className="text-red-500 text-xs italic">
-              Please choose a password.
+              {passwordError}
             </p>
           </div>
           <div className="flex items-center justify-between">
