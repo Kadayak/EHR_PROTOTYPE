@@ -68,6 +68,12 @@ const getDoctors = (): Doctor[] => {
 };
 
 async function seed() {
+  await db.users.deleteMany({});
+  await db.patients.deleteMany({});
+  await db.doctors.deleteMany({});
+  await db.refreshTokens.deleteMany({});
+  await db.appointments.deleteMany({});
+
   const users: User[] = await Promise.all(
     getUsers().map((userAuth) => {
       const user = createUser(userAuth);
@@ -87,32 +93,32 @@ async function seed() {
     })
   );
 
-  // await Promise.all(
-  //   getDoctors().map((doctor) => {
-  //     return db.doctors.create({
-  //       data: {
-  //         cpr: doctor.cpr,
-  //         firstName: doctor.firstName,
-  //         lastName: doctor.lastName,
-  //         birthDate: doctor.birthDate,
-  //       },
-  //     });
-  //   })
-  // );
+  await Promise.all(
+    getDoctors().map((doctor) => {
+      return db.doctors.create({
+        data: {
+          cpr: doctor.cpr,
+          firstName: doctor.firstName,
+          lastName: doctor.lastName,
+          birthDate: doctor.birthDate,
+        },
+      });
+    })
+  );
 
-  // await Promise.all(
-  //   getPatients().map((patient) => {
-  //     return db.patients.create({
-  //       data: {
-  //         cpr: patient.cpr,
-  //         firstName: patient.firstName,
-  //         lastName: patient.lastName,
-  //         birthDate: patient.birthDate,
-  //         homeDoctorCpr: patient.homeDoctorCpr,
-  //       },
-  //     });
-  //   })
-  // );
+  await Promise.all(
+    getPatients().map((patient) => {
+      return db.patients.create({
+        data: {
+          cpr: patient.cpr,
+          firstName: patient.firstName,
+          lastName: patient.lastName,
+          birthDate: patient.birthDate,
+          homeDoctorCpr: patient.homeDoctorCpr,
+        },
+      });
+    })
+  );
 }
 
 seed();
