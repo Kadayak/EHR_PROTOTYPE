@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import HomePage from "./pages/Home/HomePage";
 import PatientCard from "./pages/Patient/PatientCard";
@@ -10,7 +10,8 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = () => {
-    setIsLoggedIn(true);
+    //setIsLoggedIn(true);
+    console.log("Logged in");
   };
 
   const handleLogout = () => {
@@ -18,28 +19,30 @@ const App = () => {
   };
 
   return (
-    <Router>
-      <div>
+    <React.Fragment>
         <Navbar
           isLoggedIn={isLoggedIn}
-          handleLogin={handleLogin}
           handleLogout={handleLogout}
+          handleLogin={handleLogin}
         />
-        <Routes>
-            <Route exact path="" element={<HomePage />}></Route>
-            <Route exact path="/patients" element={<PatientCard />}></Route>
-            <Route exact path="/login" element={<LoginPage />}></Route>
-            <Route exact path="/signup" element={<SignUpPage/>}></Route>
-        </Routes>
-      </div>
-    </Router>
+        <div className="App">
+          <header
+            className={
+              window.location.href !== "http://localhost:3000/"
+                ? "App-header bg-hero bg-cover bg-no-repeat bg-centers"
+                : "heading"
+            }
+          >
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/patients" element={<PatientCard />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignUpPage />} />
+            </Routes>
+          </header>
+        </div>
+    </React.Fragment>
   );
 };
 
 export default App;
-
-
-
-
-
-

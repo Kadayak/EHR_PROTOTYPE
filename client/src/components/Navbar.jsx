@@ -1,14 +1,14 @@
 import React, { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { MenuIcon, BellIcon, XIcon } from "@heroicons/react/outline";
 import { Link } from "react-router-dom";
 
 const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
   const navigation = [
-    { name: "Patients", href: "/patients", current: false },
-    { name: "Notifications", href: "/notifications", current: false },
-    { name: "Projects", href: "/projects", current: false },
-    { name: "Calendar", href: "/calendar", current: false },
+    { name: "Patients", to: "/patients", current: false },
+    { name: "Notifications", to: "/notifications", current: false },
+    { name: "Projects", to: "/projects", current: false },
+    { name: "Calendar", to: "/calendar", current: false },
   ];
 
   function goToHome() {
@@ -27,9 +27,9 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
                   <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
-                      <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                      <XIcon className="block h-6 w-6" aria-hidden="true" />
                     ) : (
-                      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                      <MenuIcon className="block h-6 w-6" aria-hidden="true" />
                     )}
                   </Disclosure.Button>
                 </div>
@@ -55,7 +55,7 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
                       {navigation.map((item) => (
                         <Link
                           key={item.name}
-                          to={item.href}
+                          to={item.to}
                           className={`
                             ${
                               item.current
@@ -134,7 +134,7 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
                       onClick={handleLogin}
                       className="bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 rounded-full"
                     >
-                      Log in
+                      <Link to="/login">Log In</Link>
                     </button>
                   )}
                 </div>
@@ -146,7 +146,7 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
-                    to={item.href}
+                    to={item.to}
                     className={`
                       ${
                         item.current

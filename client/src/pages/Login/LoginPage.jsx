@@ -20,8 +20,8 @@ const LoginPage = () => {
 
   return (
     <React.Fragment>
-      <div className="w-full max-w-xs">
-        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 ">
+      <div className="flex flex-col items-center justify-center h-screen">
+        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-md">
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -68,9 +68,9 @@ const LoginPage = () => {
               Forgot Password?
             </a>
           </div>
-          <div class="relative flex py-5 items-center">
-            <div class="flex-grow border-t border-gray-400"></div>
-            <span class="flex-shrink mx-4 text-gray-400 text-xs">
+          <div className="relative flex py-5 items-center">
+            <div className="flex-grow border-t border-gray-400"></div>
+            <span className="flex-shrink mx-4 text-gray-400 text-xs">
               New to EHR Solutions?
             </span>
             <div class="flex-grow border-t border-gray-400"></div>
@@ -81,7 +81,7 @@ const LoginPage = () => {
             </button>
           </div>
         </form>
-        <p className="text-center text-black text-xs">
+        <p className="text-center text-black text-xs mt-2">
           &copy;EHR Solutions. All rights reserved.
         </p>
       </div>
