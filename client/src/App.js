@@ -5,6 +5,7 @@ import PatientCard from "./pages/Patient/PatientCard";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import HomePage from "./pages/Home/HomePage";
 import LoginPage from "./pages/Login/LoginPage";
+import SignUpPage from "./pages/Signup/SignUpPage";
 
 function App() {
   document.title = "Electronic Health Record System";
@@ -54,6 +55,7 @@ function App() {
             <Route exact path="" element={<HomePage />}></Route>
             <Route exact path="/patients" element={<PatientCard />}></Route>
             <Route exact path="/login" element={<LoginPage />}></Route>
+            <Route exact path="/signup" element={<SignUpPage/>}></Route>
           </Routes>
         </header>
       </div>
