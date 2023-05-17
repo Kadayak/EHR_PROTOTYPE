@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "./Navbar";
+import Navbar from "./components/Navbar";
 import "./App.css";
-import PatientCard from "./PatientCard";
+import PatientCard from "./pages/Patient/PatientCard";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import HomePage from "./HomePage";
-import LoginPage from "./LoginPage";
+import HomePage from "./pages/Home/HomePage";
+import LoginPage from "./pages/Login/LoginPage";
+import SignUpPage from "./pages/Signup/SignUpPage";
 
 function App() {
   document.title = "Electronic Health Record System";
@@ -32,7 +33,7 @@ function App() {
     if(typeof window !== "undefined") {
       localStorage.setItem("isLoggedIn", true);
       setLoginStatus(true);
-      navigate("login")
+      navigate("/login")
     }
   };
 
@@ -54,6 +55,7 @@ function App() {
             <Route exact path="" element={<HomePage />}></Route>
             <Route exact path="/patients" element={<PatientCard />}></Route>
             <Route exact path="/login" element={<LoginPage />}></Route>
+            <Route exact path="/signup" element={<SignUpPage/>}></Route>
           </Routes>
         </header>
       </div>
