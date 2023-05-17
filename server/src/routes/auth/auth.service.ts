@@ -11,7 +11,7 @@ import {
   toRole,
 } from "./user.js";
 
-export const signUp = async (userAuth: UserAuth) => {
+export const createUser = async (userAuth: UserAuth) => {
   const hashedPassword: string = await bcrypt.hash(userAuth.password, 10);
   const user: User = {
     cpr: userAuth.cpr,
@@ -19,8 +19,12 @@ export const signUp = async (userAuth: UserAuth) => {
     role: userAuth.role,
   };
 
+  return user;
+};
+
+export const signUp = async (userAuth: UserAuth) => {
+  const user = await createUser(userAuth);
   return await saveUser(user);
-  // return;
 };
 
 const saveUser = async (user: User) => {
