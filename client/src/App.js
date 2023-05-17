@@ -29,8 +29,8 @@ const App = () => {
         <header
           className={
             window.location.href !== "http://localhost:3000/"
-              ? "App-header bg-hero bg-cover bg-no-repeat bg-centers"
-              : "heading"
+              ? "App-header bg-gray-100"
+              : "bg-gray-100"
           }
         >
           <Routes>
