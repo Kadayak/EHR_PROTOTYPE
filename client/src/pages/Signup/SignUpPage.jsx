@@ -11,7 +11,6 @@ const SignUpPage = () => {
   const [role, setRole] = useState("Choose a role");
   const [homeDoctorCpr, setHomeDoctorCpr] = useState("");
   const [error, setError] = useState("");
-
   const handleSignUp = async () => {
     try {
       const response = await axios.post(
@@ -29,7 +28,11 @@ const SignUpPage = () => {
       console.log(response);
       // Redirect to login page on successful signup
     } catch (error) {
-      setError(error.response.data);
+      if (error.response && error.response.data) {
+        setError(error.response.data.message);
+      } else {
+        setError("An error occurred during sign up.");
+      }
     }
   };
 

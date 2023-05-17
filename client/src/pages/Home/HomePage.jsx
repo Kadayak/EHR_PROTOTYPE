@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./HomePage.css";
-import heroImage from "C:/React/f_react/client/src/assets/bg_hero.jpg";
-import featureImage1 from "C:/React/f_react/client/src/assets/feature-image-1.jpg";
-import featureImage2 from "C:/React/f_react/client/src/assets/feature-image-2.jpg";
-import featureImage3 from "C:/React/f_react/client/src/assets/feature-image-3.jpg";
+import heroImage from "../../assets/bg_hero.jpg";
+import featureImage1 from "../../assets/feature-image-1.jpg";
+import featureImage2 from "../../assets/feature-image-2.jpg";
+import featureImage3 from "../../assets/feature-image-3.jpg";
 
 function HomePage() {
   return (
@@ -27,7 +27,7 @@ function HomePage() {
             </button>
           </div>
           <div className="HeroCardImageContainer">
-            <img src={heroImage} alt="hero" className="HeroCardImage" />
+          <img src={heroImage} alt="hero" className="HeroCardImage"/>
           </div>
         </div>
       </section>
