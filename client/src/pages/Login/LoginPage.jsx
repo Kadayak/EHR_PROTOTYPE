@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [cpr, setCPR] = useState("");
   const [password, setPassword] = useState("");
   const [cprError, setCPRError] = useState("");
-  const [passwordError, setPasswordError] = useState("Please choose a password");
+  const [passwordError, setPasswordError] = useState(
+    "Please choose a password"
+  );
   const [passwordIsValid, setPasswordValid] = useState(false);
 
   async function login() {
-    console.log("Login Started");
-
     if (!validateCPR(cpr)) {
       setCPRError("Invalid CPR number format");
       return;
@@ -21,25 +21,23 @@ const LoginPage = () => {
       return;
     }
 
-    console.log(cpr)
-    console.log(password)
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/api/auth/login/",
+        {
+          cpr: cpr,
+          password: password,
+        }
+      );
 
-    await axios
-      .post("http://localhost:3001/api/auth/login/", {
-        cpr: cpr,
-        password: password,
-      })
-      .then((response) => {
-        console.log("SUCCESS");
-        localStorage.setItem('accessToken', response.data.accessToken)
-        localStorage.setItem('refreshToken', response.data.refreshToken)
-        alert("login success");
-      })
-      .catch((error) => {
-        console.log("ERROR");
-        console.log(error.response.data);
-        alert("login error");
-      });
+      localStorage.setItem("accessToken", response.data.accessToken);
+      localStorage.setItem("refreshToken", response.data.refreshToken);
+      alert("Login success");
+    } catch (error) {
+      console.log("ERROR");
+      console.log(error.response.data);
+      alert("Login error");
+    }
   }
 
   function handleCPRChange(event) {
@@ -47,34 +45,32 @@ const LoginPage = () => {
     setCPR(inputValue);
     setCPRError(""); // Clear any previous error message
   }
-  
+
   function validateCPR(cpr) {
     const cprRegex = /^\d{6}\d{4}$/;
     return cprRegex.test(cpr);
   }
-  
+
   function handlePasswordChange(event) {
     const inputValue = event.target.value;
-    setPassword(inputValue)
+    setPassword(inputValue);
 
     if (!validatePassword()) {
       setPasswordValid(false);
       setPasswordError("Invalid password format");
       return;
-    }
-
-    else {
+    } else {
       setPasswordValid(true);
       setPasswordError("");
     }
   }
 
   function validatePassword() {
-    if (password === "") return false
-    if (password.length < 2) return false
-    return true;
+    // if (password === "") return false
+    if (password.length < 2) return false;
+    else return true;
   }
-  
+
   return (
     <React.Fragment>
       <div className="flex flex-col items-center justify-center h-screen">
@@ -107,15 +103,15 @@ const LoginPage = () => {
               Password
             </label>
             <input
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline ${!passwordIsValid && "border-red-500"}`}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline ${
+                !passwordIsValid && "border-red-500"
+              }`}
               id="password"
               type="password"
               placeholder="******************"
               onChange={handlePasswordChange}
             ></input>
-            <p className="text-red-500 text-xs italic">
-              {passwordError}
-            </p>
+            <p className="text-red-500 text-xs italic">{passwordError}</p>
           </div>
           <div className="flex items-center justify-between">
             <button
