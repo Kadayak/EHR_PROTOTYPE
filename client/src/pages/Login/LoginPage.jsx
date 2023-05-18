@@ -24,16 +24,21 @@ const LoginPage = () => {
     console.log(cpr)
     console.log(password)
 
-    const response = await axios
+    await axios
       .post("http://localhost:3001/api/auth/login/", {
         cpr: cpr,
         password: password,
       })
       .then((response) => {
-        console.log(response);
+        console.log("SUCCESS");
+        localStorage.setItem('accessToken', response.data.accessToken)
+        localStorage.setItem('refreshToken', response.data.refreshToken)
+        alert("login success");
       })
       .catch((error) => {
+        console.log("ERROR");
         console.log(error.response.data);
+        alert("login error");
       });
   }
 
@@ -85,8 +90,8 @@ const LoginPage = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
-              pattern="\d{4}-\d{4}"
-              placeholder="xxxxxx-xxxx"
+              // pattern="\d{4}-\d{4}" // Is this necessary?
+              placeholder="xxxxxxxxxx"
               value={cpr}
               onChange={handleCPRChange}
             ></input>

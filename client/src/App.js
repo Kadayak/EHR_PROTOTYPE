@@ -13,7 +13,6 @@ const App = () => {
     //setIsLoggedIn(true);
     console.log("Logged in");
   };
-
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
