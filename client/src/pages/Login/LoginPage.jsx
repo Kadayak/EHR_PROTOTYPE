@@ -26,7 +26,7 @@ const LoginPage = () => {
     if (!validatePassword(password)) {
       return;
     }
-  
+
     try {
       const response = await axios.post(
         "http://localhost:3001/api/auth/login/",
@@ -38,6 +38,7 @@ const LoginPage = () => {
   
       localStorage.setItem("accessToken", response.data.accessToken);
       localStorage.setItem("refreshToken", response.data.refreshToken);
+      localStorage.setItem('role', response.data.role);
       navigate("/"); // Navigate to homepage upon successful login
     } catch (error) {
       console.log("ERROR");
