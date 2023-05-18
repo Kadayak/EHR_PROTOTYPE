@@ -1,18 +1,63 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, BellIcon, XIcon } from "@heroicons/react/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import userImage from "../assets/userImage.png";
 
-const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
+const Navbar = ({ handleLogout }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState("");
+  const navigate = useNavigate();
+
   const navigation = [
-    { name: "Patients", to: "/patients", current: false },
-    { name: "Notifications", to: "/notifications", current: false },
-    { name: "Projects", to: "/projects", current: false },
+    { name: "Appointments", to: "/appointments", current: false },
     { name: "Calendar", to: "/calendar", current: false },
   ];
 
   function goToHome() {
-    window.location.href = "/";
+    navigate("/");
+  }
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    const role = localStorage.getItem("role");
+    if (accessToken && role) {
+      setIsLoggedIn(true);
+      setUserRole(role);
+      updateNavigation(role);
+    }
+  }, []);
+
+  function handleLogoutClick() {
+    handleLogout(); // Call the prop function
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("role");
+    setIsLoggedIn(false);
+    setUserRole("");
+    navigate("/login");
+  }
+
+  function updateNavigation(role) {
+    if (role === "doctor") {
+      // Add the "Patients" option to navigation for doctors
+      const updatedNavigation = [
+        ...navigation,
+        { name: "Patients", to: "/patients", current: false },
+      ];
+      setNavigation(updatedNavigation);
+    }
+  }
+
+  function setNavigation(updatedNavigation) {
+    navigation.forEach((navItem) => {
+      const updatedItem = updatedNavigation.find(
+        (item) => item.name === navItem.name
+      );
+      if (updatedItem) {
+        navItem.current = updatedItem.current;
+      }
+    });
   }
 
   return (
@@ -23,13 +68,15 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
               <div className="relative flex h-16 items-center justify-between">
                 <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                  {/* Mobile menu button*/}
                   <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
                       <XIcon className="block h-6 w-6" aria-hidden="true" />
                     ) : (
-                      <MenuIcon className="block h-6 w-6" aria-hidden="true" />
+                      <MenuIcon
+                        className="block h-6 w-6"
+                        aria-hidden="true"
+                      />
                     )}
                   </Disclosure.Button>
                 </div>
@@ -52,22 +99,23 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
                   </div>
                   <div className="hidden sm:ml-6 sm:block">
                     <div className="flex space-x-4">
-                      {navigation.map((item) => (
-                        <Link
-                          key={item.name}
-                          to={item.to}
-                          className={`
-                            ${
-                              item.current
-                                ? "bg-gray-900 text-white"
-                                : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                            }
-                            rounded-md px-3 py-2 text-sm font-medium
-                          `}
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
+                      {isLoggedIn &&
+                        navigation.map((item) => (
+                          <Link
+                            key={item.name}
+                            to={item.to}
+                            className={`
+                              ${
+                                item.current
+                                  ? "bg-gray-900 text-white"
+                                  : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                              }
+                              px-3 py-2 rounded-md text-sm font-medium
+                            `}
+                          >
+                            {item.name}
+                          </Link>
+                        ))}
                     </div>
                   </div>
                 </div>
@@ -87,7 +135,7 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
                           <span className="sr-only">Open user menu</span>
                           <img
                             className="h-8 w-8 rounded-full"
-                            src="user-avatar.jpg"
+                            src={userImage}
                             alt="User Avatar"
                           />
                         </Menu.Button>
@@ -117,7 +165,7 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
                           <Menu.Item>
                             {({ active }) => (
                               <button
-                                onClick={handleLogout}
+                                onClick={handleLogoutClick}
                                 className={`${
                                   active ? "bg-gray-100" : ""
                                 } block px-4 py-2 text-sm text-gray-700 w-full text-left`}
@@ -130,10 +178,7 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
                       </Transition>
                     </Menu>
                   ) : (
-                    <button
-                      onClick={handleLogin}
-                      className="bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 rounded-full"
-                    >
+                    <button className="bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 rounded-full">
                       <Link to="/login">Log In</Link>
                     </button>
                   )}
@@ -143,22 +188,23 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
 
             <Disclosure.Panel className="sm:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.to}
-                    className={`
-                      ${
-                        item.current
-                          ? "bg-gray-900 text-white"
-                          : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                      }
-                      block px-3 py-2 text-base font-medium rounded-md
-                    `}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
+                {isLoggedIn &&
+                  navigation.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.to}
+                      className={`
+                        ${
+                          item.current
+                            ? "bg-gray-900 text-white"
+                            : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                        }
+                        block px-3 py-2 text-base font-medium rounded-md
+                      `}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
               </div>
             </Disclosure.Panel>
           </>

@@ -14,22 +14,21 @@ const PatientCard = (props) => {
   }, []);
 
   const fetchPatients = async () => {
-
-    let config = {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
-      }
-    }
-
-    await axios.get("http://localhost:3001/api/patients", config)
-    .then((response) => {
+    try {
+      let config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      };
+  
+      const response = await axios.get("http://localhost:3001/api/patients", config);
       console.log("SUCCESS");
       setPatients(response.data);
-    }).catch((error) => {
+    } catch (error) {
       console.log("ERROR");
-      alert("error retreiving patients");
-    })
-  }
+      alert("Error retrieving patients");
+    }
+  };
 
   return (
     <React.Fragment>
