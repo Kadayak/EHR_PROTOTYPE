@@ -19,7 +19,7 @@ function HomePage() {
               style={{ backgroundColor: "darksalmon" }}
             >
               <Link
-                to="/login"
+                to="/signup"
                 style={{ color: "white", textDecoration: "none" }}
               >
                 Get Started

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   useNavigate,
 } from "react-router-dom";
+
 import Navbar from "./components/Navbar";
 import HomePage from "./pages/Home/HomePage";
 import PatientCard from "./pages/Patient/PatientCard";
@@ -28,6 +30,7 @@ const App = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("role");
+    localStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
     // Redirect to the login page or any other desired page
     navigate("/login");

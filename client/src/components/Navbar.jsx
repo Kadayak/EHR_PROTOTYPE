@@ -4,12 +4,12 @@ import { MenuIcon, BellIcon, XIcon } from "@heroicons/react/outline";
 import { Link, useNavigate } from "react-router-dom";
 import userImage from "../assets/userImage.png";
 
-const Navbar = ({ isLoggedIn, handleLogout }) => {
+const Navbar = ({ handleLogout }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState("");
   const navigate = useNavigate();
 
   const navigation = [
-    { name: "Notifications", to: "/notifications", current: false },
     { name: "Appointments", to: "/appointments", current: false },
     { name: "Calendar", to: "/calendar", current: false },
   ];
@@ -19,8 +19,13 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
   }
 
   useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
     const role = localStorage.getItem("role");
-    setUserRole(role);
+    if (accessToken && role) {
+      setIsLoggedIn(true);
+      setUserRole(role);
+      updateNavigation(role);
+    }
   }, []);
 
   function handleLogoutClick() {
@@ -28,12 +33,31 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("role");
+    setIsLoggedIn(false);
     setUserRole("");
     navigate("/login");
   }
 
-  if (userRole !== "patient") {
-    navigation.unshift({ name: "Patients", to: "/patients", current: false });
+  function updateNavigation(role) {
+    if (role === "doctor") {
+      // Add the "Patients" option to navigation for doctors
+      const updatedNavigation = [
+        ...navigation,
+        { name: "Patients", to: "/patients", current: false },
+      ];
+      setNavigation(updatedNavigation);
+    }
+  }
+
+  function setNavigation(updatedNavigation) {
+    navigation.forEach((navItem) => {
+      const updatedItem = updatedNavigation.find(
+        (item) => item.name === navItem.name
+      );
+      if (updatedItem) {
+        navItem.current = updatedItem.current;
+      }
+    });
   }
 
   return (
@@ -49,7 +73,10 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
                     {open ? (
                       <XIcon className="block h-6 w-6" aria-hidden="true" />
                     ) : (
-                      <MenuIcon className="block h-6 w-6" aria-hidden="true" />
+                      <MenuIcon
+                        className="block h-6 w-6"
+                        aria-hidden="true"
+                      />
                     )}
                   </Disclosure.Button>
                 </div>
@@ -72,22 +99,23 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
                   </div>
                   <div className="hidden sm:ml-6 sm:block">
                     <div className="flex space-x-4">
-                      {navigation.map((item) => (
-                        <Link
-                          key={item.name}
-                          to={item.to}
-                          className={`
-                            ${
-                              item.current
-                                ? "bg-gray-900 text-white"
-                                : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                            }
-                            rounded-md px-3 py-2 text-sm font-medium
-                          `}
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
+                      {isLoggedIn &&
+                        navigation.map((item) => (
+                          <Link
+                            key={item.name}
+                            to={item.to}
+                            className={`
+                              ${
+                                item.current
+                                  ? "bg-gray-900 text-white"
+                                  : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                              }
+                              px-3 py-2 rounded-md text-sm font-medium
+                            `}
+                          >
+                            {item.name}
+                          </Link>
+                        ))}
                     </div>
                   </div>
                 </div>
@@ -160,22 +188,23 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
 
             <Disclosure.Panel className="sm:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.to}
-                    className={`
-                      ${
-                        item.current
-                          ? "bg-gray-900 text-white"
-                          : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                      }
-                      block px-3 py-2 text-base font-medium rounded-md
-                    `}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
+                {isLoggedIn &&
+                  navigation.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.to}
+                      className={`
+                        ${
+                          item.current
+                            ? "bg-gray-900 text-white"
+                            : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                        }
+                        block px-3 py-2 text-base font-medium rounded-md
+                      `}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
               </div>
             </Disclosure.Panel>
           </>
