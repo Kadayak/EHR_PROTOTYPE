@@ -1,12 +1,13 @@
 // loads default data into our database, so that on initialization, we have some data every time we reset it.
-
+import { UUID, randomUUID } from "crypto";
 import { db } from "../src/utils/db.server.js";
 import { Patient } from "../src/routes/patients/patient.js";
 import { Doctor } from "../src/routes/doctors/doctor.js";
 import { UserAuth, Role, User } from "../src/routes/auth/user.js";
 import { createUser } from "../src/routes/auth/auth.service.js";
+import { MedicalData } from "@prisma/client";
 
-function getUsers(): UserAuth[] {
+const getUsers = (): UserAuth[] => {
   return [
     {
       cpr: "0503023180",
@@ -29,9 +30,9 @@ function getUsers(): UserAuth[] {
       role: Role.Doctor,
     },
   ];
-}
+};
 
-function getPatients(): Patient[] {
+const getPatients = (): Patient[] => {
   return [
     {
       cpr: "0503023180",
@@ -48,7 +49,20 @@ function getPatients(): Patient[] {
       homeDoctorCpr: "0101802020",
     },
   ];
-}
+};
+
+const getMedicalData = (): MedicalData[] => {
+  return [
+    {
+      id: randomUUID().toString(),
+      patientCpr: "0503023180",
+    },
+    {
+      id: randomUUID().toString(),
+      patientCpr: "1407022830",
+    },
+  ];
+};
 
 const getDoctors = (): Doctor[] => {
   return [
@@ -69,6 +83,7 @@ const getDoctors = (): Doctor[] => {
 
 async function seed() {
   await db.users.deleteMany({});
+  await db.medicalData.deleteMany({});
   await db.patients.deleteMany({});
   await db.doctors.deleteMany({});
   await db.refreshTokens.deleteMany({});
@@ -115,6 +130,17 @@ async function seed() {
           lastName: patient.lastName,
           birthDate: patient.birthDate,
           homeDoctorCpr: patient.homeDoctorCpr,
+        },
+      });
+    })
+  );
+
+  await Promise.all(
+    getMedicalData().map((medData) => {
+      return db.medicalData.create({
+        data: {
+          id: medData.id,
+          patientCpr: medData.patientCpr,
         },
       });
     })
