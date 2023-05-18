@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
-import "./LoginPage.css"; // Import the CSS file
 
 Modal.setAppElement("#root");
 
-const LoginPage = () => {
+const LoginPage = ({ handleLogin }) => {
   const navigate = useNavigate();
   const [cpr, setCPR] = useState("");
   const [password, setPassword] = useState("");
@@ -17,12 +16,14 @@ const LoginPage = () => {
   const [passwordIsValid, setPasswordValid] = useState(false);
   const [errorDialogIsOpen, setErrorDialogIsOpen] = useState(false);
 
-  async function login() {
+  async function login(event) {
+    event.preventDefault(); // Prevent form submission
+
     if (!validateCPR(cpr)) {
       setCPRError("Invalid CPR number format");
       return;
     }
-  
+
     if (!validatePassword(password)) {
       return;
     }
@@ -35,14 +36,17 @@ const LoginPage = () => {
           password: password,
         }
       );
-  
-      localStorage.setItem("accessToken", response.data.accessToken);
-      localStorage.setItem("refreshToken", response.data.refreshToken);
-      localStorage.setItem('role', response.data.role);
+
+      if (response && response.data) {
+        localStorage.setItem("accessToken", response.data.accessToken);
+        localStorage.setItem("refreshToken", response.data.refreshToken);
+        localStorage.setItem("role", response.data.role);
+      }
+
+      handleLogin();
       navigate("/"); // Navigate to homepage upon successful login
     } catch (error) {
-      console.log("ERROR");
-      console.log(error.response.data);
+      console.log("ERROR:", error);
       setErrorDialogIsOpen(true); // Show the error dialog
     }
   }
@@ -62,7 +66,7 @@ const LoginPage = () => {
     const inputValue = event.target.value;
     setPassword(inputValue);
 
-    if (!validatePassword()) {
+    if (!validatePassword(inputValue)) {
       setPasswordValid(false);
       setPasswordError("Invalid password format");
       return;
@@ -72,7 +76,7 @@ const LoginPage = () => {
     }
   }
 
-  function validatePassword() {
+  function validatePassword(password) {
     // if (password === "") return false
     if (password.length < 2) return false;
     else return true;
@@ -97,7 +101,7 @@ const LoginPage = () => {
               placeholder="xxxxxxxxxx"
               value={cpr}
               onChange={handleCPRChange}
-            ></input>
+            />
             {cprError && (
               <p className="text-red-500 text-xs italic">{cprError}</p>
             )}
@@ -117,7 +121,7 @@ const LoginPage = () => {
               type="password"
               placeholder="******************"
               onChange={handlePasswordChange}
-            ></input>
+            />
             <p className="text-red-500 text-xs italic">{passwordError}</p>
           </div>
           <div className="flex items-center justify-between">

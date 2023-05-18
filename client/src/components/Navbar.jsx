@@ -1,18 +1,38 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, BellIcon, XIcon } from "@heroicons/react/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
+  const [userRole, setUserRole] = useState("");
+  const navigate = useNavigate();
+
   const navigation = [
-    { name: "Patients", to: "/patients", current: false },
     { name: "Notifications", to: "/notifications", current: false },
     { name: "Projects", to: "/projects", current: false },
     { name: "Calendar", to: "/calendar", current: false },
   ];
 
   function goToHome() {
-    window.location.href = "/";
+    navigate("/");
+  }
+
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    setUserRole(role);
+  }, []);
+
+  function handleLogoutClick() {
+    handleLogout(); // Call the prop function
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("role");
+    setUserRole("");
+    navigate("/login");
+  }
+
+  if (userRole !== "patient") {
+    navigation.unshift({ name: "Patients", to: "/patients", current: false });
   }
 
   return (
@@ -23,7 +43,6 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
               <div className="relative flex h-16 items-center justify-between">
                 <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                  {/* Mobile menu button*/}
                   <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
@@ -117,7 +136,7 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
                           <Menu.Item>
                             {({ active }) => (
                               <button
-                                onClick={handleLogout}
+                                onClick={handleLogoutClick}
                                 className={`${
                                   active ? "bg-gray-100" : ""
                                 } block px-4 py-2 text-sm text-gray-700 w-full text-left`}
