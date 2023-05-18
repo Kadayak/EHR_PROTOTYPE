@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import * as patientService from "./patients.service.js";
-import { Patient, PatientRequest } from "./patient.js";
+import { Patient, PatientRequest, PatientResponse } from "./patient.js";
 import authenticateToken from "../../utils/token_auth.js";
 import { validateCpr, cprRules } from "../auth/auth.service.js";
 
@@ -26,7 +26,7 @@ patientRouter.get("/:cpr", async (req, res) => {
 
     if (!validateCpr(cpr)) return res.status(400).json({ message: cprRules });
 
-    const patient = await patientService.getPatient(cpr);
+    const patient: PatientResponse = await patientService.getPatient(cpr);
 
     if (!patient)
       return res
