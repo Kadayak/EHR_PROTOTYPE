@@ -12,12 +12,14 @@ export type UserEntity = {
 
 export type UserToken = {
   cpr: string;
+  role: string;
   iat: string;
   exp: string;
 };
 
 export type UserTokenGenerator = {
   cpr: string;
+  role: string;
 };
 
 export type UserAuth = {
