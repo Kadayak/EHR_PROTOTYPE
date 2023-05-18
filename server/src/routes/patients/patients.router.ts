@@ -10,6 +10,16 @@ export const patientRouter = Router();
 patientRouter.use(authenticateToken);
 
 patientRouter.get("/", async (req, res) => {
+  const userCpr = req.user.cpr;
+
+  // if ?self=true is set, this is the patient requesting their own data.
+  const { self } = req.query;
+
+  if (self) {
+    const medicalHistory = await patientService.getMedicalData(userCpr);
+    return res.status(200).json(medicalHistory);
+  }
+
   const userRole: Role = toRole(req.user.role);
   if (userRole !== Role.Doctor) {
     res
@@ -17,7 +27,6 @@ patientRouter.get("/", async (req, res) => {
       .json({ message: "Only doctors are allowed access to patients" });
   }
 
-  const userCpr = req.user.cpr;
   const patients = await patientService.listPatients(userCpr);
 
   return res.status(200).json(patients);

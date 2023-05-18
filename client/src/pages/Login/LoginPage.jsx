@@ -44,7 +44,7 @@ const LoginPage = ({ handleLogin }) => {
       }
 
       handleLogin();
-      navigate("/"); // Navigate to homepage upon successful login
+      navigate("/profile"); // Navigate to profile page upon successful login
     } catch (error) {
       console.log("ERROR:", error);
       setErrorDialogIsOpen(true); // Show the error dialog

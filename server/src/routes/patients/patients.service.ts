@@ -76,6 +76,10 @@ export const createPatient = async (
   return res.status(201).json(patientResponse);
 };
 
+export const getMedicalData = async (userCpr: string) => {
+  return await patientRepository.getMedicalData(userCpr);
+};
+
 const invalidPatientRequest = (patientRequest: PatientRequest) => {
   return false;
 };

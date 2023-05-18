@@ -13,6 +13,7 @@ import PatientCard from "./pages/Patient/PatientCard";
 import LoginPage from "./pages/Login/LoginPage";
 import SignUpPage from "./pages/Signup/SignUpPage";
 import Modal from "react-modal";
+import ProfilePage from "./pages/Profile/ProfilePage";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -55,6 +56,7 @@ const App = () => {
               element={<LoginPage handleLogin={handleLogin} />}
             />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </header>
       </div>
