@@ -2,14 +2,15 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, BellIcon, XIcon } from "@heroicons/react/outline";
 import { Link, useNavigate } from "react-router-dom";
+import userImage from "../assets/userImage.png";
 
-const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
+const Navbar = ({ isLoggedIn, handleLogout }) => {
   const [userRole, setUserRole] = useState("");
   const navigate = useNavigate();
 
   const navigation = [
     { name: "Notifications", to: "/notifications", current: false },
-    { name: "Projects", to: "/projects", current: false },
+    { name: "Appointments", to: "/appointments", current: false },
     { name: "Calendar", to: "/calendar", current: false },
   ];
 
@@ -106,7 +107,7 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
                           <span className="sr-only">Open user menu</span>
                           <img
                             className="h-8 w-8 rounded-full"
-                            src="user-avatar.jpg"
+                            src={userImage}
                             alt="User Avatar"
                           />
                         </Menu.Button>
@@ -149,10 +150,7 @@ const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
                       </Transition>
                     </Menu>
                   ) : (
-                    <button
-                      onClick={handleLogin}
-                      className="bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 rounded-full"
-                    >
+                    <button className="bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 rounded-full">
                       <Link to="/login">Log In</Link>
                     </button>
                   )}
