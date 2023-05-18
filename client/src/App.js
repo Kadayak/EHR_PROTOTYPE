@@ -5,9 +5,13 @@ import HomePage from "./pages/Home/HomePage";
 import PatientCard from "./pages/Patient/PatientCard";
 import LoginPage from "./pages/Login/LoginPage";
 import SignUpPage from "./pages/Signup/SignUpPage";
+import Modal from "react-modal";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const rootElement = document.getElementById('root');
+
+  Modal.setAppElement(rootElement);
 
   const handleLogin = () => {
     //setIsLoggedIn(true);

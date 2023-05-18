@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Modal from "react-modal";
+import "./LoginPage.css"; // Import the CSS file
+
+Modal.setAppElement("#root");
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [cpr, setCPR] = useState("");
   const [password, setPassword] = useState("");
   const [cprError, setCPRError] = useState("");
@@ -10,17 +15,18 @@ const LoginPage = () => {
     "Please choose a password"
   );
   const [passwordIsValid, setPasswordValid] = useState(false);
+  const [errorDialogIsOpen, setErrorDialogIsOpen] = useState(false);
 
   async function login() {
     if (!validateCPR(cpr)) {
       setCPRError("Invalid CPR number format");
       return;
     }
-
+  
     if (!validatePassword(password)) {
       return;
     }
-
+  
     try {
       const response = await axios.post(
         "http://localhost:3001/api/auth/login/",
@@ -29,14 +35,14 @@ const LoginPage = () => {
           password: password,
         }
       );
-
+  
       localStorage.setItem("accessToken", response.data.accessToken);
       localStorage.setItem("refreshToken", response.data.refreshToken);
-      alert("Login success");
+      navigate("/"); // Navigate to homepage upon successful login
     } catch (error) {
       console.log("ERROR");
       console.log(error.response.data);
-      alert("Login error");
+      setErrorDialogIsOpen(true); // Show the error dialog
     }
   }
 
@@ -141,6 +147,24 @@ const LoginPage = () => {
             </button>
           </div>
         </form>
+        <Modal
+          isOpen={errorDialogIsOpen}
+          className="modal"
+          overlayClassName="modal-overlay"
+        >
+          <div className="flex flex-col items-center justify-center">
+            <h2 className="text-2xl font-bold mb-4">Login Failed</h2>
+            <p className="text-gray-700 mb-6">
+              There was an error during login. Please try again.
+            </p>
+            <button
+              className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              onClick={() => setErrorDialogIsOpen(false)}
+            >
+              Close
+            </button>
+          </div>
+        </Modal>
         <p className="text-center text-black text-xs mt-2">
           &copy;EHR Solutions. All rights reserved.
         </p>
