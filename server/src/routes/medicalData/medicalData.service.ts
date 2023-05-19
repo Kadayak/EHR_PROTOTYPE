@@ -3,8 +3,6 @@ import { Response } from "express";
 import * as medicalDataRepository from "./medicalData.repository.js";
 
 export const getMedicalDataById = async (res: Response, id: string) => {
-  console.log("made it here");
-
   const medicalData = await medicalDataRepository.getMedicalDataById(id);
 
   if (!medicalData) {

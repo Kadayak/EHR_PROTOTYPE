@@ -11,11 +11,14 @@ const ProfilePage = () => {
 
     useEffect(() => {
         getMedicalData();
-        // getHomeDoctor();
     }, []);
 
+    useEffect(() => {
+        getHomeDoctor();
+    }, [medicalData]);
+    
+
     const getMedicalData = async () => {
-        
         let config = {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -33,6 +36,7 @@ const ProfilePage = () => {
     }
 
     const getHomeDoctor = async () => {
+        if (medicalData === undefined) return;
 
         let config = {
             headers: {
@@ -40,11 +44,16 @@ const ProfilePage = () => {
             },
         };
 
-        await axios.get(`http://localhost:3001/api/doctors/${medicalData.homeDoctorCpr}`, config);
+        await axios.get(`http://localhost:3001/api/patients/${medicalData.patientCpr}`, config)
+        .then((response) => {
+            console.log(response);
+            setHomeDoctor(response.data);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
-    console.log(medicalData);
-    
 
     return (<div className="bg-white">
         <h1 className="text-center text-2xl p-6">Your medical data</h1>
@@ -72,7 +81,10 @@ const ProfilePage = () => {
 
         {localStorage.getItem("role") === "patient" ? "you are a patient" : "you are a doctor"}
 
-        {}
+        {homeDoctor ? (<div>
+            {homeDoctor.firstName}
+        </div>)
+        : (<div>No home doctor</div>)}
     </div>)
 }
 

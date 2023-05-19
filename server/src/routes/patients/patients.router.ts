@@ -34,14 +34,14 @@ patientRouter.get("/", async (req, res) => {
 
 patientRouter.get("/:cpr", async (req, res) => {
   const userRole: Role = toRole(req.user.role);
-  if (userRole !== Role.Doctor) {
+  const { cpr } = req.params;
+  const userCpr = req.user.cpr;
+
+  if (userRole !== Role.Doctor && cpr !== userCpr) {
     res
       .status(401)
       .json({ message: "Only doctors are allowed access to patients" });
   }
-
-  const { cpr } = req.params;
-  const userCpr = req.user.cpr;
 
   if (!validateCpr(cpr)) return res.status(400).json({ message: cprRules });
 
@@ -52,7 +52,7 @@ patientRouter.get("/:cpr", async (req, res) => {
       .status(404)
       .json({ message: `Patient with cpr ${cpr} not found` });
 
-  if (patient.homeDoctorCpr !== userCpr)
+  if (patient.homeDoctorCpr !== userCpr && cpr !== userCpr)
     return res
       .status(403)
       .json({ message: "Patient is not assigned this doctor" });
