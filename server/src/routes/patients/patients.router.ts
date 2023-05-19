@@ -13,7 +13,7 @@ patientRouter.get("/", async (req, res) => {
   const userCpr = req.user.cpr;
 
   // if ?self=true is set, this is the patient requesting their own data.
-  const { self } = req.query;
+  const self = Boolean(req.query.self);
 
   if (self) {
     const medicalHistory = await patientService.getMedicalData(userCpr);

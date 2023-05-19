@@ -26,12 +26,14 @@ model Patients {
 }
 
 model MedicalData {
-  id String @id @default(uuid())
+  id           String   @id @default(uuid())
   // createdAt DateTime @default(now())
   // updatedAt DateTime @updatedAt
-
-  Patient    Patients @relation(fields: [patientCpr], references: [cpr])
-  patientCpr String   @unique
+  Patient      Patients @relation(fields: [patientCpr], references: [cpr])
+  patientCpr   String   @unique
+  bloodStatus  String
+  allergies    String // should be a list?
+  vaccinations String // should be a list?
 }
 
 model Doctors {

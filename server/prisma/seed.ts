@@ -56,10 +56,16 @@ const getMedicalData = (): MedicalData[] => {
     {
       id: randomUUID().toString(),
       patientCpr: "0503023180",
+      bloodStatus: "A+",
+      vaccinations: "Phizer (Covid) - 13.11.2020 | Polio (IPV) - 12.05.1985",
+      allergies: "Lactose / dairy",
     },
     {
       id: randomUUID().toString(),
       patientCpr: "1407022830",
+      bloodStatus: "O-",
+      vaccinations: "Janssen (Covid) - 05.10.2020 | Influenza - 20.11.2022",
+      allergies: "Pet allergies (dander, saliva, urine)",
     },
   ];
 };
@@ -141,6 +147,9 @@ async function seed() {
         data: {
           id: medData.id,
           patientCpr: medData.patientCpr,
+          bloodStatus: medData.bloodStatus,
+          allergies: medData.allergies,
+          vaccinations: medData.vaccinations,
         },
       });
     })
