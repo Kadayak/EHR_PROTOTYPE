@@ -5,8 +5,8 @@ import * as authService from "./auth.service.js";
 import * as patientService from "../patients/patients.service.js";
 import * as doctorService from "../doctors/doctors.service.js";
 import { User, UserTokenGenerator, Role, UserAuth, toRole } from "./user.js";
-import { Patient, PatientRequest } from "../patients/patient.js";
-import { Doctor, DoctorRequest } from "../doctors/doctor.js";
+import { PatientRequest } from "../patients/patient.js";
+import { DoctorRequest } from "../doctors/doctor.js";
 
 export const authRouter = Router();
 
@@ -35,7 +35,6 @@ authRouter.post("/signUp", async (req, res) => {
   const role: Role = toRole(req.body.role); // test this
 
   if (role === Role.Doctor) {
-    console.log("doctor seen");
     const doctor: DoctorRequest = {
       cpr: req.body.cpr,
       firstName: req.body.firstName,
@@ -46,8 +45,6 @@ authRouter.post("/signUp", async (req, res) => {
     const response = await doctorService.createDoctor(res, doctor);
     return response;
   } else if (role === Role.Patient) {
-    console.log("patient seen");
-
     const patient: PatientRequest = {
       cpr: req.body.cpr,
       firstName: req.body.firstName,
@@ -78,14 +75,16 @@ authRouter.post("/login", async (req, res) => {
       .json({ message: "User not found with this cpr and password" });
   }
 
-  const userToken: UserTokenGenerator = { cpr: user.cpr };
+  const userToken: UserTokenGenerator = { cpr: user.cpr, role: user.role };
 
   const accessToken = authService.generateAccessToken(userToken);
   const refreshToken = authService.generateRefreshToken(userToken);
 
-  return res
-    .status(201)
-    .json({ accessToken: accessToken, refreshToken: refreshToken });
+  return res.status(201).json({
+    accessToken: accessToken,
+    refreshToken: refreshToken,
+    role: user.role,
+  });
 });
 
 authRouter.delete("/logout", async (req, res) => {
@@ -116,7 +115,7 @@ authRouter.post("/token", async (req, res) => {
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
     if (err) return res.status(403).json({ message: err.message });
 
-    const userToken: UserTokenGenerator = { cpr: user.cpr };
+    const userToken: UserTokenGenerator = { cpr: user.cpr, role: user.role };
     const accessToken = authService.generateAccessToken(userToken);
 
     res.status(201).json({ accessToken: accessToken });

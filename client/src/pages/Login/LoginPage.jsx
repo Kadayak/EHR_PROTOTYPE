@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Modal from "react-modal";
 
-const LoginPage = () => {
+Modal.setAppElement("#root");
+
+const LoginPage = ({ handleLogin }) => {
+  const navigate = useNavigate();
   const [cpr, setCPR] = useState("");
   const [password, setPassword] = useState("");
   const [cprError, setCPRError] = useState("");
-  const [passwordError, setPasswordError] = useState("Please choose a password");
+  const [passwordError, setPasswordError] = useState(
+    "Please choose a password"
+  );
   const [passwordIsValid, setPasswordValid] = useState(false);
+  const [errorDialogIsOpen, setErrorDialogIsOpen] = useState(false);
 
-  async function login() {
-    console.log("Login Started");
+  async function login(event) {
+    event.preventDefault(); // Prevent form submission
 
     if (!validateCPR(cpr)) {
       setCPRError("Invalid CPR number format");
@@ -21,25 +28,27 @@ const LoginPage = () => {
       return;
     }
 
-    console.log(cpr)
-    console.log(password)
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/api/auth/login/",
+        {
+          cpr: cpr,
+          password: password,
+        }
+      );
 
-    await axios
-      .post("http://localhost:3001/api/auth/login/", {
-        cpr: cpr,
-        password: password,
-      })
-      .then((response) => {
-        console.log("SUCCESS");
-        localStorage.setItem('accessToken', response.data.accessToken)
-        localStorage.setItem('refreshToken', response.data.refreshToken)
-        alert("login success");
-      })
-      .catch((error) => {
-        console.log("ERROR");
-        console.log(error.response.data);
-        alert("login error");
-      });
+      if (response && response.data) {
+        localStorage.setItem("accessToken", response.data.accessToken);
+        localStorage.setItem("refreshToken", response.data.refreshToken);
+        localStorage.setItem("role", response.data.role);
+      }
+
+      handleLogin();
+      navigate("/"); // Navigate to homepage upon successful login
+    } catch (error) {
+      console.log("ERROR:", error);
+      setErrorDialogIsOpen(true); // Show the error dialog
+    }
   }
 
   function handleCPRChange(event) {
@@ -47,34 +56,32 @@ const LoginPage = () => {
     setCPR(inputValue);
     setCPRError(""); // Clear any previous error message
   }
-  
+
   function validateCPR(cpr) {
     const cprRegex = /^\d{6}\d{4}$/;
     return cprRegex.test(cpr);
   }
-  
+
   function handlePasswordChange(event) {
     const inputValue = event.target.value;
-    setPassword(inputValue)
+    setPassword(inputValue);
 
-    if (!validatePassword()) {
+    if (!validatePassword(inputValue)) {
       setPasswordValid(false);
       setPasswordError("Invalid password format");
       return;
-    }
-
-    else {
+    } else {
       setPasswordValid(true);
       setPasswordError("");
     }
   }
 
-  function validatePassword() {
-    if (password === "") return false
-    if (password.length < 2) return false
-    return true;
+  function validatePassword(password) {
+    // if (password === "") return false
+    if (password.length < 2) return false;
+    else return true;
   }
-  
+
   return (
     <React.Fragment>
       <div className="flex flex-col items-center justify-center h-screen">
@@ -94,7 +101,7 @@ const LoginPage = () => {
               placeholder="xxxxxxxxxx"
               value={cpr}
               onChange={handleCPRChange}
-            ></input>
+            />
             {cprError && (
               <p className="text-red-500 text-xs italic">{cprError}</p>
             )}
@@ -107,15 +114,15 @@ const LoginPage = () => {
               Password
             </label>
             <input
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline ${!passwordIsValid && "border-red-500"}`}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline ${
+                !passwordIsValid && "border-red-500"
+              }`}
               id="password"
               type="password"
               placeholder="******************"
               onChange={handlePasswordChange}
-            ></input>
-            <p className="text-red-500 text-xs italic">
-              {passwordError}
-            </p>
+            />
+            <p className="text-red-500 text-xs italic">{passwordError}</p>
           </div>
           <div className="flex items-center justify-between">
             <button
@@ -145,6 +152,24 @@ const LoginPage = () => {
             </button>
           </div>
         </form>
+        <Modal
+          isOpen={errorDialogIsOpen}
+          className="modal"
+          overlayClassName="modal-overlay"
+        >
+          <div className="flex flex-col items-center justify-center">
+            <h2 className="text-2xl font-bold mb-4">Login Failed</h2>
+            <p className="text-gray-700 mb-6">
+              There was an error during login. Please try again.
+            </p>
+            <button
+              className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              onClick={() => setErrorDialogIsOpen(false)}
+            >
+              Close
+            </button>
+          </div>
+        </Modal>
         <p className="text-center text-black text-xs mt-2">
           &copy;EHR Solutions. All rights reserved.
         </p>
