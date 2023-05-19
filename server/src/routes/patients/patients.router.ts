@@ -60,6 +60,8 @@ patientRouter.post("/", async (req, res) => {
     homeDoctorCpr: req.body.homeDoctorCpr,
   };
 
+  console.log(patientRequest);
+
   const patientResponse = await patientService.createPatient(
     res,
     patientRequest

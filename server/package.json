@@ -8,6 +8,7 @@
     "seed": "ts-node --esm prisma/seed.ts"
   },
   "scripts": {
+    "pretest": "npx prisma db seed",
     "test":"jest",
     "build": "rimraf src/dist && npx tsc",
     "prestart": "npm run build",
