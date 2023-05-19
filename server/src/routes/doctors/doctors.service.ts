@@ -7,6 +7,12 @@ export const getDoctors = async (res): Promise<Doctor[]> => {
   return res.status(200).json(doctors);
 };
 
+export const doctorExists = async (id: string): Promise<Boolean> => {
+  const doctor = await doctorRepository.getDoctor(id);
+
+  return !!doctor;
+};
+
 export const createDoctor = async (
   res,
   doctorRequest: DoctorRequest

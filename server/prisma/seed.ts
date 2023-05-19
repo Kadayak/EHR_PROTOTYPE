@@ -9,6 +9,11 @@ import { createUser } from "../src/routes/auth/auth.service.js";
 function getUsers(): UserAuth[] {
   return [
     {
+      cpr: "tester",
+      password: "tester",
+      role: Role.Patient,
+    },
+    {
       cpr: "0503023180",
       password: "strong_password",
       role: Role.Patient,
@@ -69,6 +74,7 @@ const getDoctors = (): Doctor[] => {
 
 async function seed() {
   await db.users.deleteMany({});
+  await db.medicalData.deleteMany({});
   await db.patients.deleteMany({});
   await db.doctors.deleteMany({});
   await db.refreshTokens.deleteMany({});
