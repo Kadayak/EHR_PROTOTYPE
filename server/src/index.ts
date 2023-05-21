@@ -28,7 +28,7 @@ app.use("/api/doctors", doctorRouter);
 app.use("/api/auth", authRouter);
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.status(200).json({ hello: "World!" });
 });
 
 app.listen(port, () => {

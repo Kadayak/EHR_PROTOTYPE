@@ -68,11 +68,11 @@ export const loginUser = async (
 // VALIDATION
 
 export const validateCpr = (cpr: string) => {
-  if (!cpr) return false;
-  return true;
+  const numberRegex = /^\d{10}$/; // ten numbers
+  return numberRegex.test(cpr);
 };
 
-export const cprRules = "Cpr must be a non-empty string";
+export const cprRules = "Cpr must be made up of 10 numbers";
 
 export const validatePassword = (password: string) => {
   if (!password) return false;

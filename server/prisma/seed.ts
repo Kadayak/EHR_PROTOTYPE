@@ -10,6 +10,11 @@ import { MedicalData } from "@prisma/client";
 const getUsers = (): UserAuth[] => {
   return [
     {
+      cpr: "tester",
+      password: "tester",
+      role: Role.Patient,
+    },
+    {
       cpr: "0503023180",
       password: "strong_password",
       role: Role.Patient,

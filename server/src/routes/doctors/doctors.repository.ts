@@ -12,6 +12,20 @@ export const getDoctors = async (): Promise<Doctor[]> => {
   });
 };
 
+export const getDoctor = async (cpr): Promise<Doctor> => {
+  return await db.doctors.findUnique({
+    where: {
+      cpr: cpr,
+    },
+    select: {
+      cpr: true,
+      firstName: true,
+      lastName: true,
+      birthDate: true,
+    },
+  });
+};
+
 export const createDoctor = async (doctor: Doctor): Promise<Doctor> => {
   return await db.doctors.create({
     data: {
