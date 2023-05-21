@@ -27,6 +27,7 @@ const ProfilePage = () => {
 
         await axios.get(`http://localhost:3001/api/patients?self=true`, config)
         .then((response) => {
+            console.log(response);
             if (response.data === null) setMedicalData(null);
             else setMedicalData(response.data.MedicalData)
         })
@@ -36,7 +37,8 @@ const ProfilePage = () => {
     }
 
     const getHomeDoctor = async () => {
-        if (medicalData === undefined) return;
+        if (medicalData === undefined) return; // medicalData hasn't been fetched.
+        if (medicalData === null) return; // medicalData fetched, but none found.
 
         let config = {
             headers: {
@@ -59,6 +61,7 @@ const ProfilePage = () => {
         <h1 className="text-center text-2xl p-6">Your medical data</h1>
         {medicalData !== undefined ? 
             (medicalData !== null ? (<div>
+                Medical data found
                 <div className="px-12">
                     <div className="mb-4 text-xl">
                         <h2>{`Cpr: ${medicalData.patientCpr}`}</h2>
