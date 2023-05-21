@@ -14,3 +14,14 @@ export const createPatient = async (
     },
   });
 };
+
+export const getMedicalData = async (userCpr: string) => {
+  return await db.patients.findUnique({
+    where: {
+      cpr: userCpr,
+    },
+    select: {
+      MedicalData: true,
+    },
+  });
+};
