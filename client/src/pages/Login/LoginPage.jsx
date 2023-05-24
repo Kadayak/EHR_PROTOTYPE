@@ -19,9 +19,6 @@ const LoginPage = () => {
   const [passwordIsValid, setPasswordValid] = useState(false);
   const [errorDialogIsOpen, setErrorDialogIsOpen] = useState(false);
 
-  useEffect(() => {
-    console.log("user changed... ", user);
-  }, [user]);
 
   async function login(event) {
     event.preventDefault(); // Prevent form submission

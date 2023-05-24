@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 import {
   BrowserRouter as Router,
@@ -19,6 +19,10 @@ import ProfilePage from "./pages/Profile/ProfilePage";
 
 const App = () => {
   const [user, setUser] = useState(null); // for AUTH
+
+  useEffect(() => {
+    console.log("user changed... ", user);
+  }, [user]);
 
   const providerValue = useMemo(() => [user, setUser], [user, setUser]);
 

@@ -13,11 +13,12 @@ const ProfilePage = () => {
     const [homeDoctor, setHomeDoctor] = useState(undefined);
 
 
-    const config = {
+    const config = user ? {
         headers: {
-          Authorization: `Bearer ${user ? user.accessToken : null}`,
+          Authorization: `Bearer ${user.accessToken}`,
         },
-    };
+    }
+    : null;
 
     useEffect(() => {
         getMedicalData();
@@ -73,7 +74,6 @@ const ProfilePage = () => {
 
     return (
     <div>
-        {console.log(user)}
         {!user ? (<div>You are not logged in</div>)
         : (<div className="bg-white">
             <h1 className="text-center text-2xl p-6">Your medical data</h1>
