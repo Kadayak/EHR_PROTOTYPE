@@ -18,7 +18,7 @@ import { UserContext } from "./context/UserContext";
 import ProfilePage from "./pages/Profile/ProfilePage";
 
 const App = () => {
-  const [user, setUser] = useState("init"); // for AUTH
+  const [user, setUser] = useState(null); // for AUTH
 
   const providerValue = useMemo(() => [user, setUser], [user, setUser]);
 

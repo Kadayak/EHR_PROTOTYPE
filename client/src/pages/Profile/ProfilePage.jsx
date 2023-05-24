@@ -15,7 +15,7 @@ const ProfilePage = () => {
 
     const config = {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          Authorization: `Bearer ${user ? user.accessToken : null}`,
         },
     };
 
@@ -71,43 +71,47 @@ const ProfilePage = () => {
     }
 
 
-    return (<div className="bg-white">
-        <h1 className="text-center text-2xl p-6">Your medical data</h1>
-        {medicalData !== undefined ? 
-            (medicalData !== null ? (<div>
-                <div className="px-12">
-                    <div className="mb-4 text-xl">
-                        {userInfo && (<h1 className=" text-2xl">{`${userInfo.firstName} ${userInfo.lastName}`}</h1>)}
-                        <h2>{`Cpr: ${medicalData.patientCpr}`}</h2>
+    return (
+    <div>
+        {console.log(user)}
+        {!user ? (<div>You are not logged in</div>)
+        : (<div className="bg-white">
+            <h1 className="text-center text-2xl p-6">Your medical data</h1>
+            {medicalData !== undefined ? 
+                (medicalData !== null ? (<div>
+                    <div className="px-12">
+                        <div className="mb-4 text-xl">
+                            {userInfo && (<h1 className=" text-2xl">{`${userInfo.firstName} ${userInfo.lastName}`}</h1>)}
+                            <h2>{`Cpr: ${medicalData.patientCpr}`}</h2>
+                        </div>
+                        <div className="mb-4">
+                            <h2>Allergies</h2>
+                            <p>{medicalData.allergies}</p>
+                        </div>
+                        <div className="mb-4">
+                            <h2>Blood Status</h2>
+                            <p>{medicalData.bloodStatus}</p>
+                        </div>
+                        <div className="mb-4">
+                            <h2>Vaccinations</h2>
+                            <p>{medicalData.vaccinations}</p>
+                        </div>
                     </div>
-                    <div className="mb-4">
-                        <h2>Allergies</h2>
-                        <p>{medicalData.allergies}</p>
-                    </div>
-                    <div className="mb-4">
-                        <h2>Blood Status</h2>
-                        <p>{medicalData.bloodStatus}</p>
-                    </div>
-                    <div className="mb-4">
-                        <h2>Vaccinations</h2>
-                        <p>{medicalData.vaccinations}</p>
-                    </div>
+                </div>) : (<div className="pl-10 text-xl">No medical data found</div>))
+            : (<Loading/>)}
+
+            {user && user.role === "patient" ? "(you are a patient)" : "(you are a doctor)"}
+
+            {homeDoctor ? (<div className="border-2 w-80 m-8 p-4">
+                <h1 className="text-xl">Your home doctor</h1>
+                <h2>{`${homeDoctor.firstName} ${homeDoctor.lastName} - cpr: ${homeDoctor.cpr}`}</h2>
+                <div className="flex justify-center">
+                    <button className="border-2 px-2 py-1 m-2 bg-sky-300">Book appointment</button>
                 </div>
-                <button onClick={() => {console.log(user)}}>See UserContext</button>
-            </div>) : (<div className="pl-10 text-xl">No medical data found</div>))
-        : (<Loading/>)}
-
-        {localStorage.getItem("role") === "patient" ? "(you are a patient)" : "(you are a doctor)"}
-
-        {homeDoctor ? (<div className="border-2 w-80 m-8 p-4">
-            <h1 className="text-xl">Your home doctor</h1>
-            <h2>{`${homeDoctor.firstName} ${homeDoctor.lastName} - cpr: ${homeDoctor.cpr}`}</h2>
-            <div className="flex justify-center">
-                <button className="border-2 px-2 py-1 m-2 bg-sky-300">Book appointment</button>
-            </div>
-        </div>)
-        : (<div>No home doctor</div>)}
+            </div>)
+            : (<div>No home doctor</div>)}
+        </div>)}
     </div>)
-}
+};
 
 export default ProfilePage;

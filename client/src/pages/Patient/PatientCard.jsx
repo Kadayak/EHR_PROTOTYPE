@@ -1,13 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { UserContext } from "../../context/UserContext";
 
-const PatientCard = (props) => {
-  const { id, firstName, lastName, email, photo, appointment } = props;
-  const [clicked, setClicked] = React.useState(true);
+const PatientCard = () => {
+  const [user, setUser] = useContext(UserContext);
   const [patients, setPatients] = React.useState(null);
-  const location = useLocation();
-
 
   React.useEffect(() => {
     fetchPatients();
@@ -17,7 +15,7 @@ const PatientCard = (props) => {
     try {
       let config = {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          Authorization: `Bearer ${user ? user.accessToken : null}`,
         },
       };
   
