@@ -7,6 +7,15 @@ export const getDoctors = async (res): Promise<Doctor[]> => {
   return res.status(200).json(doctors);
 };
 
+export const getDoctorById = async (res, id: string): Promise<Doctor> => {
+  const doctor = await doctorRepository.getDoctor(id);
+
+  if (!doctor)
+    return res.status(404).json({ message: `doctor with id ${id} not found` });
+
+  return res.status(200).json(doctor);
+};
+
 export const doctorExists = async (id: string): Promise<Boolean> => {
   const doctor = await doctorRepository.getDoctor(id);
 

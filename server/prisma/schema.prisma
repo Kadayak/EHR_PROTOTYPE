@@ -22,6 +22,19 @@ model Patients {
   homeDoctorCpr String
 
   Appointments Appointments[]
+  MedicalData  MedicalData?
+}
+
+model MedicalData {
+  id           String   @id @default(uuid())
+  // createdAt DateTime @default(now())
+  // updatedAt DateTime @updatedAt
+  Patient      Patients @relation(fields: [patientCpr], references: [cpr])
+  patientCpr   String   @unique
+  bloodStatus  String
+  allergies    String // should be a list?
+  vaccinations String // should be a list?
+  // Appointments Appointments[]
 }
 
 model Doctors {
@@ -50,6 +63,9 @@ model Appointments {
 
   doctor     Doctors @relation(fields: [doctorsCpr], references: [cpr])
   doctorsCpr String
+
+  // medicalData   MedicalData @relation(fields: [medicalDataId], references: [id])
+  // medicalDataId String
 }
 
 model Users {

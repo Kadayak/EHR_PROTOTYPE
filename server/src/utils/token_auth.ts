@@ -11,8 +11,6 @@ const authenticateToken = (req, res, next) => {
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) return res.status(403).json({ message: err.message });
 
-    console.log(user);
-
     let { cpr, role, iat, exp } = user;
 
     const userToken: UserToken = {

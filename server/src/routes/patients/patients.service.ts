@@ -71,11 +71,9 @@ export const createPatient = async (
   );
 
   if (!doctorExists)
-    return res
-      .status(404)
-      .json({
-        message: `doctor with cpr: ${patientRequest.homeDoctorCpr} not found`,
-      });
+    return res.status(404).json({
+      message: `doctor with cpr: ${patientRequest.homeDoctorCpr} not found`,
+    });
 
   const patient: Patient = {
     cpr: patientRequest.cpr,
@@ -88,6 +86,10 @@ export const createPatient = async (
     await patientRepository.createPatient(patient);
 
   return res.status(201).json(patientResponse);
+};
+
+export const getMedicalData = async (userCpr: string) => {
+  return await patientRepository.getMedicalData(userCpr);
 };
 
 const invalidPatientBody = (patientRequest: PatientRequest) => {
