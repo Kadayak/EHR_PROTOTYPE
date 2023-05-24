@@ -44,7 +44,6 @@ const App = () => {
   };
 
   return (
-<<<<<<< HEAD
     <UserContext.Provider value={(user, setUser)}>
       <React.Fragment>
         <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
@@ -64,36 +63,12 @@ const App = () => {
                 element={<LoginPage handleLogin={handleLogin} />}
               />
               <Route path="/signup" element={<SignUpPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
             </Routes>
           </header>
         </div>
       </React.Fragment>
     </UserContext.Provider>
-=======
-    <React.Fragment>
-      <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
-      <div className="App">
-        <header
-          className={
-            window.location.href !== "http://localhost:3000/"
-              ? "App-header bg-gray-100"
-              : "bg-gray-100"
-          }
-        >
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/patients" element={<PatientCard />} />
-            <Route
-              path="/login"
-              element={<LoginPage handleLogin={handleLogin} />}
-            />
-            <Route path="/signup" element={<SignUpPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-          </Routes>
-        </header>
-      </div>
-    </React.Fragment>
->>>>>>> d928a6bf77d6c353147ae025a1abd0bcc904a233
   );
 };
 
