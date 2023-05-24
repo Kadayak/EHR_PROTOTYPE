@@ -30,12 +30,7 @@ const Navbar = ({ handleLogout }) => {
 
   function handleLogoutClick() {
     handleLogout(); // Call the prop function
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("role");
-    setIsLoggedIn(false);
     setUserRole("");
-    navigate("/login");
   }
 
   function updateNavigation(role) {

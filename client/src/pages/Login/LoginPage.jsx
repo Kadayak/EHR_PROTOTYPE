@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
+import { UserContext } from "../../context/UserContext";
 
 Modal.setAppElement("#root");
 
 const LoginPage = ({ handleLogin }) => {
+  const { user, setUser } = useContext(UserContext);
+
   const navigate = useNavigate();
   const [cpr, setCPR] = useState("");
   const [password, setPassword] = useState("");
@@ -19,14 +22,8 @@ const LoginPage = ({ handleLogin }) => {
   async function login(event) {
     event.preventDefault(); // Prevent form submission
 
-    if (!validateCPR(cpr)) {
-      setCPRError("Invalid CPR number format");
-      return;
-    }
-
-    if (!validatePassword(password)) {
-      return;
-    }
+    if (!validateCPR(cpr)) return setCPRError("Invalid CPR number format");
+    if (!validatePassword(password)) return;
 
     try {
       const response = await axios.post(
@@ -38,6 +35,9 @@ const LoginPage = ({ handleLogin }) => {
       );
 
       if (response && response.data) {
+        const userData = {...response.data, cpr: cpr };
+        console.log("userData: ", userData);
+        setUser(userData);
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
         localStorage.setItem("role", response.data.role);
