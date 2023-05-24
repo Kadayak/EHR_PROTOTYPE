@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 import Loading from "../../components/Loading";
+import { UserContext } from "../../context/UserContext";
 
 
 const ProfilePage = () => {
+    const [ user, setUser ] = useContext(UserContext);
     const [medicalData, setMedicalData] = useState(undefined);
-    const [user, setUser] = useState(undefined);
+    const [userInfo, setUserInfo] = useState(undefined);
     const [homeDoctor, setHomeDoctor] = useState(undefined);
+
 
     const config = {
         headers: {
@@ -21,12 +24,12 @@ const ProfilePage = () => {
     }, []);
 
     useEffect(() => {
-        getUser();
+        getUserInfo();
     }, [medicalData]);
 
     useEffect(() => {
         getHomeDoctor();
-    }, [user]);
+    }, [userInfo]);
     
 
     const getMedicalData = async () => {
@@ -40,13 +43,13 @@ const ProfilePage = () => {
         });
     }
 
-    const getUser = async () => {
+    const getUserInfo = async () => {
         if (medicalData === undefined) return; // medicalData hasn't been fetched.
         if (medicalData === null) return; // medicalData fetched, but none found.
 
         await axios.get(`http://localhost:3001/api/patients/${medicalData.patientCpr}`, config)
         .then((response) => {
-            setUser(response.data);
+            setUserInfo(response.data);
         })
         .catch((error) => {
             console.log(error);
@@ -54,13 +57,11 @@ const ProfilePage = () => {
     }
 
     const getHomeDoctor = async () => {
-        if (user === undefined) return; // not yet fetched
-        if (user === null) return;  // fetched but not found... this should not happen tho.
+        if (userInfo === undefined) return; // not yet fetched
+        if (userInfo === null) return;  // fetched but not found... this should not happen tho.
 
-        await axios.get(`http://localhost:3001/api/doctors/${user.homeDoctorCpr}`, config)
+        await axios.get(`http://localhost:3001/api/doctors/${userInfo.homeDoctorCpr}`, config)
         .then((response) => {
-            console.log("success");
-            console.log(response);
             setHomeDoctor(response.data)
         })
         .catch((error) => {
@@ -76,7 +77,7 @@ const ProfilePage = () => {
             (medicalData !== null ? (<div>
                 <div className="px-12">
                     <div className="mb-4 text-xl">
-                        {user && (<h1 className=" text-2xl">{`${user.firstName} ${user.lastName}`}</h1>)}
+                        {userInfo && (<h1 className=" text-2xl">{`${userInfo.firstName} ${userInfo.lastName}`}</h1>)}
                         <h2>{`Cpr: ${medicalData.patientCpr}`}</h2>
                     </div>
                     <div className="mb-4">
@@ -92,6 +93,7 @@ const ProfilePage = () => {
                         <p>{medicalData.vaccinations}</p>
                     </div>
                 </div>
+                <button onClick={() => {console.log(user)}}>See UserContext</button>
             </div>) : (<div className="pl-10 text-xl">No medical data found</div>))
         : (<Loading/>)}
 

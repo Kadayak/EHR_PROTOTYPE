@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 
 import {
   BrowserRouter as Router,
@@ -18,35 +18,19 @@ import { UserContext } from "./context/UserContext";
 import ProfilePage from "./pages/Profile/ProfilePage";
 
 const App = () => {
-  const [user, setUser] = useState(null); // for AUTH
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState("init"); // for AUTH
+
+  const providerValue = useMemo(() => [user, setUser], [user, setUser]);
 
   const rootElement = document.getElementById("root");
   const navigate = useNavigate(); // Add this line to import the useNavigate hook
 
   Modal.setAppElement(rootElement);
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    console.log("Logged in");
-  };
-
-  const handleLogout = () => {
-    // await axios.delete("http://localhost:3001/api/auth/logout", )
-
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("role");
-    localStorage.removeItem("isLoggedIn");
-    setIsLoggedIn(false);
-    // Redirect to the login page or any other desired page
-    navigate("/login");
-  };
-
   return (
-    <UserContext.Provider value={(user, setUser)}>
+    <UserContext.Provider value={providerValue}>
       <React.Fragment>
-        <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+        <Navbar />
         <div className="App">
           <header
             className={
@@ -58,10 +42,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/patients" element={<PatientCard />} />
-              <Route
-                path="/login"
-                element={<LoginPage handleLogin={handleLogin} />}
-              />
+              <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignUpPage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Routes>

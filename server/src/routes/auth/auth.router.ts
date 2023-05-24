@@ -91,7 +91,9 @@ authRouter.delete("/logout", async (req, res) => {
   const refreshToken: string = req.body.token;
 
   if (!refreshToken)
-    res.status(400).json({ message: "body has to include token" });
+    return res
+      .status(400)
+      .json({ message: "body has to include refresh token" });
 
   const _ = await authService.deleteRefreshToken(refreshToken); //TODO handle if refresh token was not found -> couldnt be deleted.
 

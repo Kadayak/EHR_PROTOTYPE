@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
@@ -6,8 +6,8 @@ import { UserContext } from "../../context/UserContext";
 
 Modal.setAppElement("#root");
 
-const LoginPage = ({ handleLogin }) => {
-  const { user, setUser } = useContext(UserContext);
+const LoginPage = () => {
+  const [ user, setUser ] = useContext(UserContext);
 
   const navigate = useNavigate();
   const [cpr, setCPR] = useState("");
@@ -18,6 +18,10 @@ const LoginPage = ({ handleLogin }) => {
   );
   const [passwordIsValid, setPasswordValid] = useState(false);
   const [errorDialogIsOpen, setErrorDialogIsOpen] = useState(false);
+
+  useEffect(() => {
+    console.log("user changed... ", user);
+  }, [user]);
 
   async function login(event) {
     event.preventDefault(); // Prevent form submission
@@ -36,14 +40,13 @@ const LoginPage = ({ handleLogin }) => {
 
       if (response && response.data) {
         const userData = {...response.data, cpr: cpr };
-        console.log("userData: ", userData);
         setUser(userData);
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
         localStorage.setItem("role", response.data.role);
       }
 
-      handleLogin();
+      // handleLogin();
       navigate("/profile"); // Navigate to profile page upon successful login
     } catch (error) {
       console.log("ERROR:", error);
@@ -82,8 +85,9 @@ const LoginPage = ({ handleLogin }) => {
     else return true;
   }
 
-  return (
-    <React.Fragment>
+  return user ? 
+    (<div>You are already signed in</div>)
+    : (<React.Fragment>
       <div className="flex flex-col items-center justify-center h-screen">
         <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-md">
           <div className="mb-4">
@@ -174,8 +178,7 @@ const LoginPage = ({ handleLogin }) => {
           &copy;EHR Solutions. All rights reserved.
         </p>
       </div>
-    </React.Fragment>
-  );
+    </React.Fragment>);
 };
 
 export default LoginPage;

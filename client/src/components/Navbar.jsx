@@ -1,12 +1,13 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, BellIcon, XIcon } from "@heroicons/react/outline";
 import { Link, useNavigate } from "react-router-dom";
 import userImage from "../assets/userImage.png";
+import { UserContext } from "../context/UserContext";
+import axios from "axios";
 
-const Navbar = ({ handleLogout }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState("");
+const Navbar = () => {
+  const [user, setUser] = useContext(UserContext);
   const navigate = useNavigate();
 
   const navigation = [
@@ -19,24 +20,36 @@ const Navbar = ({ handleLogout }) => {
   }
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    const role = localStorage.getItem("role");
-    if (accessToken && role) {
-      setIsLoggedIn(true);
-      setUserRole(role);
-      updateNavigation(role);
-    }
-  }, []);
+    updateNavigation();
+  }, [user]);
 
-  function handleLogoutClick() {
-    handleLogout(); // Call the prop function
-    setUserRole("");
+  async function handleLogoutClick() {
+    console.log("user logged out")
+
+    console.log(user);
+    console.log(user.refreshToken);
+
+    await axios.delete("http://localhost:3001/api/auth/logout", 
+    {
+      data: {
+        token: user.refreshToken
+      },
+    } )
+    .then((response) => {
+      console.log("response");
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+
+    setUser(null);
+    navigate("/login");
   }
 
-  function updateNavigation(role) {
-    if (role === "doctor") {
+  function updateNavigation() {
+    if (user && user.role === "doctor") {
       // Add the "Patients" option to navigation for doctors
-      const updatedNavigation = [
+      const updatedNavigation = [ // TODO Why not just do navigation.push()
         ...navigation,
         { name: "Patients", to: "/patients", current: false },
       ];
@@ -94,7 +107,7 @@ const Navbar = ({ handleLogout }) => {
                   </div>
                   <div className="hidden sm:ml-6 sm:block">
                     <div className="flex space-x-4">
-                      {isLoggedIn &&
+                      {user &&
                         navigation.map((item) => (
                           <Link
                             key={item.name}
@@ -123,7 +136,7 @@ const Navbar = ({ handleLogout }) => {
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
 
-                  {isLoggedIn ? (
+                  {user ? (
                     <Menu as="div" className="ml-3 relative">
                       <div>
                         <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800">
@@ -183,7 +196,7 @@ const Navbar = ({ handleLogout }) => {
 
             <Disclosure.Panel className="sm:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1">
-                {isLoggedIn &&
+                {user &&
                   navigation.map((item) => (
                     <Link
                       key={item.name}
