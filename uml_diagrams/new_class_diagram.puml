@@ -1,0 +1,115 @@
+@startuml
+
+abstract User {
+  # cpr : String
+  + firstNames : String
+  + lastName : String
+  + birthDate : Date
+  # signIn(username: String, password: String)
+  # signOut()
+}
+
+class Patient extends User {
+    + medicalHistory : MedicalHistory
+    + personalDoctor: Doctor
+    + doctorsRequestingMedicalHistory: List[Doctor]
+    + getMedicalHistory(): MedicalHistory
+    + requestAppointment(date: DateTime): None
+    + allowMedicalHistoryView(Doctor): None
+    + denyMedicalHistoryView(Doctor): None
+}
+
+class Secretary extends User {
+    + appointmentRequests : List[Appointment]
+    + bookAppointment(Appointment): None
+    + cancelAppointment(Appointment): None
+}
+
+abstract Staff extends User {
+  + accessedPatients: List[Patient]
+  + async requestMedicalHistory(patient: Patient): Promise
+  + viewMedicalHistory(patient: Patient): MedicalHistory
+}
+
+class Doctor extends Staff {
+  + appointments : List<Appointment>
+  + prescribePrescription(patient: Patient, prescription: Prescription): None
+  + assignAllergy(patient: Patient, allergy: Allergies): None
+  + addVaccine(patient: Patient, vaccine: Vaccines): None
+  + addTest(patient: Patient, test: Tests): None
+  + addAppointmentReport(appointment: Appointment, report: String): None
+}
+
+class Appointment {
+  + appointmentID : String
+  + patient : Patient
+  + date : DateTime
+  + location : String
+  + staffType : Staff
+  + report : String
+}
+
+class Prescription {
+  + patient : Patient
+  + doctor : Doctor
+  + medication : String
+  + date : DateTime
+}
+
+class MedicalHistory {
+    + appointments : List<Appointment>
+    + getAppointment(doctor: Doctor, date: Date): Appointment
+    + setAppointment(doctor: Doctor, date: Date): Appointment
+}
+
+class MedicalData {
+    + allergies : List<Allergy>
+    + prescriptions : List<Prescription>
+    + vaccinations : List<Vaccination>
+    + tests : List<Test>
+    + getAllergy(condition: String): Allergy
+    + getAppointment(doctor: Doctor, date: Date): Appointment
+    + getPrescription(doctor: Doctor, date: Date): Prescription
+    + getVaccination(condition: String): Vaccination
+    + getTest(condition: String): Test
+    + setAllergy(condition: String): Allergy
+    + setAppointment(doctor: Doctor, date: Date): Appointment
+    + setPrescription(doctor: Doctor, date: Date): Prescription
+    + setVaccination(condition: String): Vaccination
+    + setTest(condition: String): Test
+
+}
+
+class Allergy {
+  + patient : Patient
+  + doctor : Doctor
+  + allergy : String
+  + date : DateTime
+}
+
+class Vaccine {
+  + patient : Patient
+  + doctor : Doctor
+  + vaccine : String
+  + date : DateTime
+}
+
+class Test {
+  + patient : Patient
+  + doctor : Doctor
+  + test : String
+  + date : DateTime
+}
+
+
+Patient --> MedicalHistory : has
+Patient --> MedicalData : has
+Staff --> Patient : accesses
+Staff --> MedicalData : accesses
+MedicalHistory o-- Appointment : has/sets
+MedicalData o-- Prescription : has/sets
+MedicalData o-- Allergy : has/sets
+MedicalData o-- Vaccine : has/sets
+MedicalData o-- Test : has/sets
+
+@enduml

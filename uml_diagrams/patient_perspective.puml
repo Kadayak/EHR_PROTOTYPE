@@ -1,0 +1,33 @@
+@startuml
+
+top to bottom direction
+
+actor "Patient" as p
+rectangle "Electronic Health Record" as ehr {
+    usecase Login
+    usecase "Accesses user profile" as profile
+    usecase "Accesses medical history" as history
+    usecase "Views previous appointments" as appointments
+    usecase "Views prescriptions" as prescriptions
+    usecase "Views diagnoses" as diagnoses
+    usecase Logout
+}
+
+p -r-> Login
+Login -d-> profile
+profile -d-> appointments
+profile -d-> history
+profile -d-> prescriptions
+profile -d-> diagnoses
+
+
+
+profile --> Logout
+appointments -d-> Logout
+history -d-> Logout
+prescriptions -d-> Logout
+diagnoses -d-> Logout
+
+
+
+@enduml

@@ -1,0 +1,64 @@
+@startuml
+
+left to right direction
+
+'ACTORS
+:Patient: as patient
+:Medical Staff: as medical_staff
+:Doctor: as doctor
+:Secretary: as secretary
+:Hospital personnel: as hospital_personnel
+
+'USE CASES
+
+rectangle "EHR" {
+    rectangle "SIGN IN" as rect_sign_in {
+        (sign in) as sign_in
+        (patient sign in) as patient_sign_in
+        (staff sign in) as staff_sign_in
+    }
+
+    rectangle "system" as rect_system {
+        (view patient history) as view_patient_info
+        (request patient history) as request_patient_info
+
+        (book appointment) as book_appointment
+        (request appointment) as request_appointment
+
+        usecase "Add to patient history\n--\n- Assign prescription\n__\n- Add to history\n(appointments, tests + notes)\n__\n Appoint meeting\n(tests, check-ups, scans)" as add_patient_journal
+
+    }
+}
+
+
+'INHERITANCE
+medical_staff <|-- hospital_personnel
+medical_staff <|-- secretary
+hospital_personnel <|-- doctor
+
+sign_in <|-- patient_sign_in
+sign_in <|-- staff_sign_in
+
+
+
+'RELATIONSHIPS
+rect_sign_in <.. rect_system: <<includes>>
+
+medical_staff - staff_sign_in
+patient - patient_sign_in
+patient - view_patient_info
+
+hospital_personnel - view_patient_info
+hospital_personnel -- request_patient_info
+request_patient_info <. view_patient_info: <<includes>>
+
+
+patient "1" - "*" request_appointment
+secretary - book_appointment
+request_appointment <. book_appointment: <<extends>>
+
+doctor - add_patient_journal
+
+
+
+@enduml
