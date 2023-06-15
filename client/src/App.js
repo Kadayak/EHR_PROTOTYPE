@@ -13,7 +13,6 @@ import PatientCard from "./pages/Patient/PatientCard";
 import LoginPage from "./pages/Login/LoginPage";
 import SignUpPage from "./pages/Signup/SignUpPage";
 import Modal from "react-modal";
-import axios from "axios";
 import { UserContext } from "./context/UserContext";
 import ProfilePage from "./pages/Profile/ProfilePage";
 

@@ -18,12 +18,15 @@ const PatientCard = () => {
           Authorization: `Bearer ${user ? user.accessToken : null}`,
         },
       };
+
+      console.log(config);
   
       const response = await axios.get("http://localhost:3001/api/patients", config);
       console.log("SUCCESS");
       setPatients(response.data);
     } catch (error) {
       console.log("ERROR");
+      console.error(error);
       alert("Error retrieving patients");
     }
   };

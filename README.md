@@ -96,7 +96,10 @@ To get the database running, you must first have an instance of a database to co
 
 2. You can run `prisma generate`to generate a prisma client to connect to our database, but it isn't necessary. I haven't even tried it. I recommend using the Sqlite extension on VSCode marketplace, right-clicking the _dev.db_ file, and pressing "open database".
 
-**To seed the database with initial data, use `npx prisma db seed`. This command will fill the database with seed data, found in _./prisma/seed.ts_.**
+**To seed the database with initial data, use `npx prisma db seed` inside the _/backend_ directory. This command will fill the database with seed data, found in _./prisma/seed.ts_.
+If that fails, run `npx prisma db push` and then the previous command.
+If that fails, run `npm install`, then both previous commands.
+If that fails, get help.**
 
 ### Server
 

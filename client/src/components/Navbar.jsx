@@ -9,11 +9,11 @@ import axios from "axios";
 const Navbar = () => {
   const [user, setUser] = useContext(UserContext);
   const navigate = useNavigate();
-
-  const navigation = [
+  const [navigation, setNavigation] = useState(
+    [
     { name: "Appointments", to: "/appointments", current: false },
     { name: "Calendar", to: "/calendar", current: false },
-  ];
+  ]);
 
   function goToHome() {
     navigate("/");
@@ -36,7 +36,7 @@ const Navbar = () => {
       },
     } )
     .then((response) => {
-      console.log("response");
+      console.log(response);
     })
     .catch((error) => {
       console.log(error);
@@ -49,17 +49,17 @@ const Navbar = () => {
   function updateNavigation() {
     if (user && user.role === "doctor") {
       // Add the "Patients" option to navigation for doctors
-      const updatedNavigation = [ // TODO Why not just do navigation.push()
+      setNavigation([ // TODO Why not just do navigation.push()
+      { name: "Patients", to: "/patients", current: false },
         ...navigation,
-        { name: "Patients", to: "/patients", current: false },
-      ];
-      setNavigation(updatedNavigation);
+      ]);
+      setActiveNavItem();
     }
   }
 
-  function setNavigation(updatedNavigation) {
+  function setActiveNavItem() {
     navigation.forEach((navItem) => {
-      const updatedItem = updatedNavigation.find(
+      const updatedItem = navigation.find(
         (item) => item.name === navItem.name
       );
       if (updatedItem) {
