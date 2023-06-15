@@ -4,6 +4,8 @@ import * as patientRepository from "./patients.repository.js";
 import * as authService from "../auth/auth.service.js";
 import * as doctorService from "../doctors/doctors.service.js";
 import { Response } from "express";
+import { isValidDate } from "../../utils/helpers.js";
+import { Patients } from "@prisma/client";
 
 export const listPatients = async (
   userCpr: string
@@ -39,6 +41,26 @@ export const getPatient = async (
   });
 };
 
+export const getPatientEntity = async (cpr: string): Promise<Patients> => {
+  const entity = await db.patients.findUnique({
+    where: {
+      cpr: cpr,
+    },
+  });
+
+  return entity;
+};
+
+export const doesPatientExist = async (cpr: string): Promise<boolean> => {
+  const res = await db.patients.findUnique({
+    where: {
+      cpr: cpr,
+    },
+  });
+
+  return !!res;
+};
+
 export const createPatient = async (
   res: Response,
   patientRequest: PatientRequest
@@ -59,12 +81,12 @@ export const createPatient = async (
       message: `homeDoctorCpr: ${authService.cprRules}`,
     });
 
-  let date: Date = new Date(patientRequest.birthDate);
-  if (isNaN(Number(date))) {
+  if (isValidDate(patientRequest.birthDate)) {
     return res
       .status(400)
       .json({ message: "birthDate has to be a valid date" });
   }
+  let date: Date = new Date(patientRequest.birthDate);
 
   let doctorExists: Boolean = await doctorService.doctorExists(
     patientRequest.homeDoctorCpr

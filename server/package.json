@@ -10,6 +10,7 @@
   "scripts": {
     "pretest": "npx prisma db seed",
     "test":"jest",
+    "test helpers": "jest /test/helpers.test.js",
     "build": "rimraf src/dist && npx tsc",
     "prestart": "npm run build",
     "start": "node src/dist/index",

@@ -45,27 +45,23 @@ model Doctors {
   lastName  String
   birthDate DateTime
 
+  Patients     Patients[]
   Appointments Appointments[]
-
-  Patients Patients[]
 }
 
 model Appointments {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
+  id          String   @id @default(uuid())
+  // createdAt   DateTime @default(now())
   time        DateTime
   description String
   pending     Boolean  @default(true)
   approved    Boolean
 
-  patient     Patients @relation(fields: [patientsCpr], references: [cpr])
-  patientsCpr String
+  patient    Patients @relation(fields: [patientCpr], references: [cpr])
+  patientCpr String
 
-  doctor     Doctors @relation(fields: [doctorsCpr], references: [cpr])
-  doctorsCpr String
-
-  // medicalData   MedicalData @relation(fields: [medicalDataId], references: [id])
-  // medicalDataId String
+  doctor    Doctors @relation(fields: [doctorCpr], references: [cpr])
+  doctorCpr String
 }
 
 model Users {

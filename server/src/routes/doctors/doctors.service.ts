@@ -1,3 +1,4 @@
+import { Doctors } from "@prisma/client";
 import { Doctor, DoctorRequest } from "./doctor.js";
 import * as doctorRepository from "./doctors.repository.js";
 
@@ -20,6 +21,12 @@ export const doctorExists = async (id: string): Promise<Boolean> => {
   const doctor = await doctorRepository.getDoctor(id);
 
   return !!doctor;
+};
+
+export const getDoctorEntity = async (cpr: string): Promise<Doctors> => {
+  const doctor = await doctorRepository.getDoctorEntity(cpr);
+
+  return doctor;
 };
 
 export const createDoctor = async (

@@ -1,8 +1,9 @@
+import { Doctors } from "@prisma/client";
 import { db } from "../../utils/db.server.js";
 import { Doctor } from "./doctor.js";
 
 export const getDoctors = async (): Promise<Doctor[]> => {
-  return await db.doctors.findMany({
+  const res = await db.doctors.findMany({
     select: {
       cpr: true,
       firstName: true,
@@ -10,6 +11,8 @@ export const getDoctors = async (): Promise<Doctor[]> => {
       birthDate: true,
     },
   });
+
+  return res;
 };
 
 export const getDoctor = async (cpr): Promise<Doctor> => {
@@ -22,6 +25,14 @@ export const getDoctor = async (cpr): Promise<Doctor> => {
       firstName: true,
       lastName: true,
       birthDate: true,
+    },
+  });
+};
+
+export const getDoctorEntity = async (cpr: string): Promise<Doctors> => {
+  return await db.doctors.findUnique({
+    where: {
+      cpr: cpr,
     },
   });
 };

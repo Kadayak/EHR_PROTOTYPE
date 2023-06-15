@@ -5,7 +5,7 @@ import { Patient } from "../src/routes/patients/patient.js";
 import { Doctor } from "../src/routes/doctors/doctor.js";
 import { UserAuth, Role, User } from "../src/routes/auth/user.js";
 import { createUser } from "../src/routes/auth/auth.service.js";
-import { MedicalData } from "@prisma/client";
+import { Appointments, MedicalData } from "@prisma/client";
 
 const getUsers = (): UserAuth[] => {
   return [
@@ -92,6 +92,20 @@ const getDoctors = (): Doctor[] => {
   ];
 };
 
+const getAppointments = (): Appointments[] => {
+  return [
+    {
+      id: randomUUID().toString(),
+      time: new Date("05/03/2024"),
+      description: "new appointment",
+      patientCpr: "0503023180",
+      doctorCpr: "0101702021",
+      pending: true,
+      approved: false,
+    },
+  ];
+};
+
 async function seed() {
   await db.users.deleteMany({});
   await db.medicalData.deleteMany({});
@@ -155,6 +169,22 @@ async function seed() {
           bloodStatus: medData.bloodStatus,
           allergies: medData.allergies,
           vaccinations: medData.vaccinations,
+        },
+      });
+    })
+  );
+
+  await Promise.all(
+    getAppointments().map((app) => {
+      return db.appointments.create({
+        data: {
+          id: app.id,
+          time: app.time,
+          description: app.description,
+          patientCpr: app.patientCpr,
+          doctorCpr: app.doctorCpr,
+          pending: app.pending,
+          approved: app.approved,
         },
       });
     })

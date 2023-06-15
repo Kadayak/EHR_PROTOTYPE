@@ -6,6 +6,7 @@ import { medicalDataRouter } from "./routes/medicalData/medicalData.router.js";
 import { patientRouter } from "./routes/patients/patients.router.js";
 import { doctorRouter } from "./routes/doctors/doctors.router.js";
 import { authRouter } from "./routes/auth/auth.router.js";
+import { appointmentRouter } from "./routes/appointments/appointments.router.js";
 
 // initialization
 
@@ -25,6 +26,7 @@ app.use(cors());
 app.use("/api/medicalData", medicalDataRouter);
 app.use("/api/patients", patientRouter);
 app.use("/api/doctors", doctorRouter);
+app.use("/api/appointments", appointmentRouter);
 app.use("/api/auth", authRouter);
 
 app.get("/", (req, res) => {
