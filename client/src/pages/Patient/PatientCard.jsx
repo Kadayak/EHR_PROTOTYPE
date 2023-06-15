@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
-import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../../context/UserContext";
+import Loading from "../../components/Loading"
 
 const PatientCard = () => {
   const [user, setUser] = useContext(UserContext);
-  const [patients, setPatients] = React.useState(null);
+  const [patients, setPatients] = React.useState(undefined);
 
   React.useEffect(() => {
     fetchPatients();
@@ -19,15 +19,12 @@ const PatientCard = () => {
         },
       };
 
-      console.log(config);
-  
       const response = await axios.get("http://localhost:3001/api/patients", config);
       console.log("SUCCESS");
       setPatients(response.data);
     } catch (error) {
-      console.log("ERROR");
       console.error(error);
-      alert("Error retrieving patients");
+      setPatients(null);
     }
   };
 
@@ -35,7 +32,8 @@ const PatientCard = () => {
     <React.Fragment>
       <div className="grid-cols-4 gap-3 py-4">
         <div className="text-center text-2xl mb-8 font-medium">Your Patients</div>
-        {patients ? patients.map( (patient) => 
+        {!user ?  "You are logged out" :
+        (patients ? patients.map( (patient) => 
           (<div id={patient.id} className="text-left block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
             <img
               className="object-cover object-center w-full h-56 mb-6 rounded-lg"
@@ -49,7 +47,9 @@ const PatientCard = () => {
               {`Birthdate ${new Date(patient.birthDate).toLocaleDateString()}`}
               </p>
           </div> ))
-        : "Loading..."}
+        :  (patients === null ?
+          "No patients could be fetched"
+          : <Loading/>))}
       </div>
     </React.Fragment>
   );

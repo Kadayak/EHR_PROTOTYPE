@@ -6,15 +6,16 @@ import userImage from "../assets/userImage.png";
 import { UserContext } from "../context/UserContext";
 import axios from "axios";
 
+const mainNavItems = [
+{ name: "Appointments", to: "/appointments", current: false },
+{ name: "Calendar", to: "/calendar", current: false },
+];
+
 const Navbar = () => {
   const [user, setUser] = useContext(UserContext);
   const navigate = useNavigate();
-  const [navigation, setNavigation] = useState(
-    [
-    { name: "Appointments", to: "/appointments", current: false },
-    { name: "Calendar", to: "/calendar", current: false },
-  ]);
-
+  const [navItems, setNavItems] = useState(mainNavItems);
+    
   function goToHome() {
     navigate("/");
   }
@@ -25,9 +26,6 @@ const Navbar = () => {
 
   async function handleLogoutClick() {
     console.log("user logged out")
-
-    console.log(user);
-    console.log(user.refreshToken);
 
     await axios.delete("http://localhost:3001/api/auth/logout", 
     {
@@ -43,23 +41,24 @@ const Navbar = () => {
     })
 
     setUser(null);
+    setNavItems(mainNavItems);
     navigate("/login");
   }
 
   function updateNavigation() {
     if (user && user.role === "doctor") {
       // Add the "Patients" option to navigation for doctors
-      setNavigation([ // TODO Why not just do navigation.push()
+      setNavItems([ // TODO Why not just do navigation.push()
       { name: "Patients", to: "/patients", current: false },
-        ...navigation,
+        ...navItems,
       ]);
       setActiveNavItem();
     }
   }
 
   function setActiveNavItem() {
-    navigation.forEach((navItem) => {
-      const updatedItem = navigation.find(
+    navItems.forEach((navItem) => {
+      const updatedItem = navItems.find(
         (item) => item.name === navItem.name
       );
       if (updatedItem) {
@@ -108,7 +107,7 @@ const Navbar = () => {
                   <div className="hidden sm:ml-6 sm:block">
                     <div className="flex space-x-4">
                       {user &&
-                        navigation.map((item) => (
+                        navItems.map((item) => (
                           <Link
                             key={item.name}
                             to={item.to}
@@ -197,7 +196,7 @@ const Navbar = () => {
             <Disclosure.Panel className="sm:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1">
                 {user &&
-                  navigation.map((item) => (
+                  navItems.map((item) => (
                     <Link
                       key={item.name}
                       to={item.to}
