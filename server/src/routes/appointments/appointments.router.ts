@@ -13,3 +13,15 @@ appointmentRouter.post("/", async (req, res) => {
 
   return await service.createAppointment(appointment, res);
 });
+
+appointmentRouter.get("/*/patients/:patientId", async (req, res) => {
+  const { patientId } = req.params;
+
+  return await service.getAppointmentsForPatient(res, patientId);
+});
+
+appointmentRouter.get("/*/doctors/:doctorId", async (req, res) => {
+  const { doctorId } = req.params;
+
+  return await service.getAppointmentsForPatient(res, doctorId);
+});

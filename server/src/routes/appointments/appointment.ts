@@ -20,3 +20,20 @@ export type AppointmentEntity = {
   pending: boolean;
   approved: boolean;
 };
+
+export type PatientsAppointment = {
+  id: string;
+  time: Date;
+  description: string;
+  pending: boolean;
+  approved: boolean;
+};
+
+export type DoctorsAppointment = {
+  id: string;
+  time: Date;
+  description: string;
+  patient: Patient;
+  pending: boolean;
+  approved: boolean;
+};

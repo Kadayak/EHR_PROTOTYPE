@@ -15,6 +15,17 @@ export const getAppointments = async (res): Promise<Appointment[]> => {
   return res.status(200).json(entities);
 };
 
+export const getAppointmentsForPatient = async (
+  res,
+  doctorId: string
+): Promise<Appointment[]> => {
+  //TODO validate that the patient id is valid + exists + is the same as the auth token.
+
+  const entities = await repository.getAppointmentsForDoctor(doctorId);
+
+  return res.status(200).json(entities);
+};
+
 export const createAppointment = async (request, res) => {
   const [isValid, status, message] = await isValidAppointmentRequest(request);
   if (!isValid) return res.status(status).json({ message: message });
