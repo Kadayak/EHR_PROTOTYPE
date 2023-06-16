@@ -29,9 +29,7 @@ appointmentRouter.get("/all/doctors/:doctorId", async (req, res) => {
 appointmentRouter.get("/:appointmentId/doctors/:doctorId", async (req, res) => {
   const { appointmentId, doctorId } = req.params;
 
-  const approve = Boolean(req.query.approve);
-
-  console.log("approved: ", approve);
+  const approve: boolean = req.query.approve == "true"; // change to boolean
 
   return await service.resolveAppointment(
     res,
