@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 
 import { UserContext } from "../../context/UserContext";
 import PatientProfile from "./Patient/PatientProfile";
+import DoctorProfile from "./Doctor/DoctorProfile";
 
 
 const ProfilePage = () => {
@@ -14,7 +15,7 @@ const ProfilePage = () => {
         {!user 
         ? (<div>You are not logged in</div>)
         : (user.role === "doctor" 
-            ? (<div>you are a doctor</div>)
+            ? (<DoctorProfile/>)
             : (user.role === "patient" 
                 ? (<PatientProfile/>)
                 : <div>unknown</div>
