@@ -9,7 +9,7 @@ const PatientAppointment = ({app}) => {
             <h1>{new Date(app.time).toLocaleString()}</h1>
             <div className="py-2 text-center">
                 <h1>Appointment status</h1>
-                <h2>{app.pending ? (<div className="">Pending</div>) : (app.accepted ? (<div>Accepted</div>) : <div>Rejected</div>)}</h2>
+                <h2>{app.pending ? (<div className="">Pending</div>) : (app.approved ? (<div>Accepted</div>) : <div>Rejected</div>)}</h2>
             </div>
         </div>
     )
