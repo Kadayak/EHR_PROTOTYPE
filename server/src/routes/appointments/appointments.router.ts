@@ -23,5 +23,5 @@ appointmentRouter.get("/*/patients/:patientId", async (req, res) => {
 appointmentRouter.get("/*/doctors/:doctorId", async (req, res) => {
   const { doctorId } = req.params;
 
-  return await service.getAppointmentsForPatient(res, doctorId);
+  return await service.getAppointmentsForDoctor(res, doctorId);
 });

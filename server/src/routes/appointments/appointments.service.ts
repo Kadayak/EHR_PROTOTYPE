@@ -17,6 +17,17 @@ export const getAppointments = async (res): Promise<Appointment[]> => {
 
 export const getAppointmentsForPatient = async (
   res,
+  patientId: string
+): Promise<Appointment[]> => {
+  //TODO validate that the patient id is valid + exists + is the same as the auth token.
+
+  const entities = await repository.getAppointmentsForPatient(patientId);
+
+  return res.status(200).json(entities);
+};
+
+export const getAppointmentsForDoctor = async (
+  res,
   doctorId: string
 ): Promise<Appointment[]> => {
   //TODO validate that the patient id is valid + exists + is the same as the auth token.
