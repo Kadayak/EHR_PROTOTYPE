@@ -42,7 +42,7 @@ const DoctorAppointment = ({ app, getAppointments }) => {
         <h2>
           {app.pending ? (
             <div className="">Pending</div>
-          ) : app.accepted ? (
+          ) : app.approved ? (
             <div>Accepted</div>
           ) : (
             <div>Rejected</div>
