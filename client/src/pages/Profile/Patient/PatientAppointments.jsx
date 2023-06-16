@@ -18,7 +18,7 @@ const PatientAppointments = () => {
     }, []);
 
     const fetchPatientAppointments = async () => {
-        await axios.get(`http://localhost:3001/api/appointments/*/patients/${user.cpr}`)
+        await axios.get(`http://localhost:3001/api/appointments/all/patients/${user.cpr}`)
         .then((response) => {
             setAppointments(response.data);
         })

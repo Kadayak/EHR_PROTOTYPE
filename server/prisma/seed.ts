@@ -109,10 +109,10 @@ const getAppointments = (): Appointments[] => {
 async function seed() {
   await db.users.deleteMany({});
   await db.medicalData.deleteMany({});
+  await db.appointments.deleteMany({});
   await db.patients.deleteMany({});
   await db.doctors.deleteMany({});
   await db.refreshTokens.deleteMany({});
-  await db.appointments.deleteMany({});
 
   const users: User[] = await Promise.all(
     getUsers().map((userAuth) => {
