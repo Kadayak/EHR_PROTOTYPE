@@ -103,6 +103,15 @@ const getAppointments = (): Appointments[] => {
       pending: true,
       approved: false,
     },
+    {
+      id: randomUUID().toString(),
+      time: new Date("05/10/2023"),
+      description: "IMPORTANT APPOINTMENT",
+      patientCpr: "0503023180",
+      doctorCpr: "0101702021",
+      pending: true,
+      approved: false,
+    },
   ];
 };
 
