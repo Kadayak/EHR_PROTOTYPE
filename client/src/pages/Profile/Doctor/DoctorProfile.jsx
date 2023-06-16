@@ -50,7 +50,7 @@ const DoctorProfile = () => {
           console.log("help");
         } else {
           setAppointments(response.data);
-          console.log(response.data);
+          console.log("appointments: ", response.data);
         }
       })
       .catch((error) => {
