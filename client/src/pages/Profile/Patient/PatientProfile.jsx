@@ -1,9 +1,9 @@
 import { useContext } from "react"
-import { UserContext } from "../../context/UserContext"
+import { UserContext } from "../../../context/UserContext"
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-import Loading from "../../components/Loading";
+import Loading from "../../../components/Loading";
 import PatientMedicalData from "./PatientMedicalData";
 import PatientHomeDoctor from "./PatientHomeDoctor";
 import PatientAppointments from "./PatientAppointments";

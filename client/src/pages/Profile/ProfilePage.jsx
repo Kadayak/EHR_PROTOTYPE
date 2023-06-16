@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 
 import { UserContext } from "../../context/UserContext";
-import PatientProfile from "./PatientProfile";
+import PatientProfile from "./Patient/PatientProfile";
 
 
 const ProfilePage = () => {
