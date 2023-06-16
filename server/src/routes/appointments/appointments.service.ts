@@ -56,6 +56,28 @@ export const createAppointment = async (request, res) => {
   return res.status(201).json(entity);
 };
 
+export const resolveAppointment = async (
+  res,
+  appointmentId,
+  approve,
+  doctorId
+) => {
+  const app = await repository.getAppointment(appointmentId);
+
+  if (!app) return res.status(404).json({ message: "Appointment not found" });
+
+  if (app.doctorCpr != doctorId)
+    return res.status(400).json({ message: "appointment not owned by doctor" });
+
+  const entity = await repository.resolveAppointment(
+    appointmentId,
+    approve,
+    doctorId
+  );
+
+  return res.status(200).json(entity);
+};
+
 // HELPERS
 
 const isValidAppointmentRequest = async (

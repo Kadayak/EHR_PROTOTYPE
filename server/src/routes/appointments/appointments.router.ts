@@ -14,14 +14,29 @@ appointmentRouter.post("/", async (req, res) => {
   return await service.createAppointment(appointment, res);
 });
 
-appointmentRouter.get("/*/patients/:patientId", async (req, res) => {
+appointmentRouter.get("/all/patients/:patientId", async (req, res) => {
   const { patientId } = req.params;
 
   return await service.getAppointmentsForPatient(res, patientId);
 });
 
-appointmentRouter.get("/*/doctors/:doctorId", async (req, res) => {
+appointmentRouter.get("/all/doctors/:doctorId", async (req, res) => {
   const { doctorId } = req.params;
 
   return await service.getAppointmentsForDoctor(res, doctorId);
+});
+
+appointmentRouter.get("/:appointmentId/doctors/:doctorId", async (req, res) => {
+  const { appointmentId, doctorId } = req.params;
+
+  const approve = Boolean(req.query.approve);
+
+  console.log("approved: ", approve);
+
+  return await service.resolveAppointment(
+    res,
+    appointmentId,
+    approve,
+    doctorId
+  );
 });

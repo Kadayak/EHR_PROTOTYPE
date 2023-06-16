@@ -1,3 +1,4 @@
+import { Appointments } from "@prisma/client";
 import { db } from "../../utils/db.server.js";
 import {
   Appointment,
@@ -16,6 +17,16 @@ export const getAppointments = async (): Promise<AppointmentEntity[]> => {
       patient: true,
       pending: true,
       approved: true,
+    },
+  });
+
+  return res;
+};
+
+export const getAppointment = async (id): Promise<Appointments> => {
+  const res = db.appointments.findUnique({
+    where: {
+      id: id,
     },
   });
 
@@ -73,6 +84,19 @@ export const createAppointment = async (
       patientCpr: appointment.patientCpr,
       pending: appointment.pending,
       approved: appointment.approved,
+    },
+  });
+  return res;
+};
+
+export const resolveAppointment = async (appointmentId, approve, doctorId) => {
+  const res = await db.appointments.update({
+    where: {
+      id: appointmentId,
+    },
+    data: {
+      pending: false,
+      approved: approve,
     },
   });
   return res;

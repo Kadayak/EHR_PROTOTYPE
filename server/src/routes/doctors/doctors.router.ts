@@ -8,6 +8,12 @@ export const doctorRouter = Router();
 // doctorRouter.use(authenticateToken);
 
 doctorRouter.get("/", async (req, res) => {
+  const self = Boolean(req.query.self);
+
+  if (self) {
+    return res.status(200).json({ message: "You are here" });
+  }
+
   return await doctorService.getDoctors(res);
 });
 
